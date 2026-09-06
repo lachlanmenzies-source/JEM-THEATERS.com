@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>https://lachlanmenzies-source.github.io/JEM-THEATERS.com/</title>
+<title>JEM Theatres</title>
 
 <style>
 *{
@@ -1165,7 +1165,7 @@ footer{
 
         <h2>JEM PREMIUM</h2>
 
-        <div class="premium-price">
+        <div class="premium-price" id="premiumPriceDisplay">
             $19.99
         </div>
 
@@ -1272,7 +1272,7 @@ footer{
 
 /* ==========================================================
    JEM THEATRES
-   ONE FILE VERSION
+   COMPLETE ONE-FILE VERSION
 ========================================================== */
 
 
@@ -1793,7 +1793,7 @@ function scrollToIntro(){
 
 function escapeHTML(str){
 
-    return String(str)
+    return String(str ?? "")
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
@@ -1811,6 +1811,8 @@ async function renderMovies(){
 
     const grid =
         document.getElementById("movieGrid");
+
+    if(!grid) return;
 
     grid.innerHTML = "";
 
@@ -1834,7 +1836,7 @@ async function renderMovies(){
             <div class="movie-card">
 
                 <img
-                    src="${poster}"
+                    src="${escapeHTML(poster)}"
                     alt="${escapeHTML(movie.title)}"
                 >
 
@@ -1875,8 +1877,9 @@ async function renderMovies(){
                     <div class="card-actions">
 
                         <a
-                            href="${movie.trailer}"
+                            href="${escapeHTML(movie.trailer)}"
                             target="_blank"
+                            rel="noopener noreferrer"
                             class="outline-btn"
                         >
                             TRAILER
@@ -1944,7 +1947,7 @@ function renderComingSoon(){
                 </div>
 
                 <img
-                    src="${movie.poster}"
+                    src="${escapeHTML(movie.poster)}"
                     alt="${escapeHTML(movie.title)}"
                 >
 
@@ -1959,8 +1962,9 @@ function renderComingSoon(){
                     </div>
 
                     <a
-                        href="${movie.trailer}"
+                        href="${escapeHTML(movie.trailer)}"
                         target="_blank"
+                        rel="noopener noreferrer"
                         class="outline-btn"
                     >
                         WATCH TRAILER
@@ -2266,10 +2270,14 @@ function selectSeat(seat){
             "selectedSeatText"
         );
 
-    text.textContent =
-        selectedSeats.length
-            ? selectedSeats.join(", ")
-            : "None";
+    if(text){
+
+        text.textContent =
+            selectedSeats.length
+                ? selectedSeats.join(", ")
+                : "None";
+
+    }
 
 }
 
@@ -2496,6 +2504,8 @@ function addPremiumFood(id){
             x=>x.id===id
         );
 
+    if(!item) return;
+
     const existing =
         premiumFoodCart.find(
             x=>x.id===id
@@ -2632,6 +2642,14 @@ function updatePremiumCart(){
 
 function premiumCheckout(){
 
+    if(selectedSeats.length === 0){
+
+        toast("CHOOSE PREMIUM SEATS FIRST");
+
+        return;
+
+    }
+
     const ticketTotal =
         JEM_SETTINGS.premiumTicketPrice *
         selectedSeats.length;
@@ -2663,6 +2681,8 @@ function renderFood(){
 
     const grid =
         document.getElementById("foodGrid");
+
+    if(!grid) return;
 
     grid.innerHTML = "";
 
@@ -2706,6 +2726,8 @@ function addFood(id){
         regularFood.find(
             x=>x.id===id
         );
+
+    if(!item) return;
 
     const existing =
         foodCart.find(
@@ -3062,7 +3084,7 @@ function showAccount(){
             <img
                 id="accountPfp"
                 class="pfp"
-                src="${pfp}"
+                src="${escapeHTML(pfp)}"
             >
 
             <div>
@@ -3280,6 +3302,8 @@ function updateAccountUI(){
     const navPfp =
         document.getElementById("navPfp");
 
+    if(!button || !navPfp) return;
+
     if(currentUser){
 
         button.textContent =
@@ -3356,6 +3380,11 @@ function openAdminLogin(){
                 id="adminPasswordInput"
                 type="password"
                 placeholder="Enter password"
+                onkeydown="
+                    if(event.key==='Enter'){
+                        loginAdmin();
+                    }
+                "
             >
 
         </div>
@@ -3714,6 +3743,7 @@ function adminTab(tab,button){
 
 /* ==========================================================
    ADMIN MOVIE MANAGEMENT
+   NOW INCLUDES MOVIE NAME EDITOR
 ========================================================== */
 
 async function createAdminMovies(){
@@ -3748,13 +3778,29 @@ async function createAdminMovies(){
             <div class="admin-movie-card">
 
                 <h3>
+                    EDIT:
                     ${escapeHTML(movie.title)}
                 </h3>
 
                 <img
                     id="adminPosterPreview_${key}"
                     class="admin-poster-preview"
-                    src="${poster}"
+                    src="${escapeHTML(poster)}"
+                    alt="${escapeHTML(movie.title)}"
+                >
+
+                <!-- =====================
+                     MOVIE NAME
+                ====================== -->
+
+                <label>
+                    Movie Name
+                </label>
+
+                <input
+                    id="movieTitle_${key}"
+                    value="${escapeHTML(movie.title)}"
+                    placeholder="Movie name"
                 >
 
                 <div
@@ -3843,8 +3889,12 @@ function setupMovieDropZones(){
                     "posterFile_"+key
                 );
 
+            if(!input) return;
+
             zone.onclick = ()=>{
+
                 input.click();
+
             };
 
             zone.ondragover = event=>{
@@ -3936,34 +3986,116 @@ async function handlePosterFile(file,key){
 }
 
 
+/* =========================
+   SAVE MOVIE
+   SAVES NAME + POSTER +
+   TRAILER + SHOWTIMES
+========================= */
+
 function saveMovie(key){
 
-    movies[key].poster =
+    const titleInput =
+        document.getElementById(
+            "movieTitle_"+key
+        );
+
+    const posterInput =
         document.getElementById(
             "posterUrl_"+key
-        ).value;
+        );
 
-    movies[key].trailer =
+    const trailerInput =
         document.getElementById(
             "trailerUrl_"+key
-        ).value;
+        );
 
-    movies[key].times =
+    const timesInput =
         document.getElementById(
             "times_"+key
-        ).value
-        .split(",")
-        .map(x=>x.trim())
-        .filter(Boolean);
+        );
+
+    if(!titleInput ||
+       !posterInput ||
+       !trailerInput ||
+       !timesInput){
+
+        toast("COULD NOT SAVE MOVIE");
+
+        return;
+
+    }
+
+
+    /* =====================
+       SAVE MOVIE NAME
+    ====================== */
+
+    const newTitle =
+        titleInput.value.trim();
+
+    if(!newTitle){
+
+        toast("MOVIE NAME CANNOT BE EMPTY");
+
+        return;
+
+    }
+
+    movies[key].title =
+        newTitle;
+
+
+    /* =====================
+       SAVE POSTER URL
+    ====================== */
+
+    movies[key].poster =
+        posterInput.value.trim();
+
+
+    /* =====================
+       SAVE TRAILER URL
+    ====================== */
+
+    movies[key].trailer =
+        trailerInput.value.trim();
+
+
+    /* =====================
+       SAVE SHOWTIMES
+    ====================== */
+
+    movies[key].times =
+        timesInput.value
+            .split(",")
+            .map(x=>x.trim())
+            .filter(Boolean);
+
+
+    /* =====================
+       SAVE EVERYTHING
+    ====================== */
 
     localStorage.setItem(
         "jemMovieSettings",
         JSON.stringify(movies)
     );
 
+
+    /* UPDATE WEBSITE */
+
     renderMovies();
 
-    toast("MOVIE SAVED");
+
+    /* UPDATE ADMIN PANEL */
+
+    createAdminMovies();
+
+
+    toast(
+        movies[key].title.toUpperCase()+
+        " SAVED!"
+    );
 
 }
 
@@ -3996,7 +4128,8 @@ function createAdminComingMovies(){
                 <img
                     id="comingPreview${index}"
                     class="admin-poster-preview"
-                    src="${movie.poster}"
+                    src="${escapeHTML(movie.poster)}"
+                    alt="${escapeHTML(movie.title)}"
                 >
 
                 <label>
@@ -4101,6 +4234,8 @@ function setupComingDropZones(){
                     "comingFile"+index
                 );
 
+            if(!input) return;
+
             zone.onclick = ()=>{
                 input.click();
             };
@@ -4178,15 +4313,29 @@ function handleComingPoster(file,index){
         comingSoon[index].poster =
             reader.result;
 
-        document.getElementById(
-            "comingPoster"+index
-        ).value =
-            reader.result;
+        const posterInput =
+            document.getElementById(
+                "comingPoster"+index
+            );
 
-        document.getElementById(
-            "comingPreview"+index
-        ).src =
-            reader.result;
+        const preview =
+            document.getElementById(
+                "comingPreview"+index
+            );
+
+        if(posterInput){
+
+            posterInput.value =
+                reader.result;
+
+        }
+
+        if(preview){
+
+            preview.src =
+                reader.result;
+
+        }
 
         saveComingSoon();
 
@@ -4201,29 +4350,52 @@ function handleComingPoster(file,index){
 
 function saveComingMovie(index){
 
-    comingSoon[index].title =
+    const title =
         document.getElementById(
             "comingTitle"+index
-        ).value;
+        ).value.trim();
 
-    comingSoon[index].date =
+    const date =
         document.getElementById(
             "comingDate"+index
-        ).value;
+        ).value.trim();
 
-    comingSoon[index].poster =
+    const poster =
         document.getElementById(
             "comingPoster"+index
-        ).value;
+        ).value.trim();
 
-    comingSoon[index].trailer =
+    const trailer =
         document.getElementById(
             "comingTrailer"+index
-        ).value;
+        ).value.trim();
+
+    if(!title){
+
+        toast("MOVIE TITLE CANNOT BE EMPTY");
+
+        return;
+
+    }
+
+    comingSoon[index].title =
+        title;
+
+    comingSoon[index].date =
+        date || "COMING SOON";
+
+    comingSoon[index].poster =
+        poster;
+
+    comingSoon[index].trailer =
+        trailer;
 
     saveComingSoon();
 
-    toast("COMING SOON MOVIE SAVED");
+    toast(
+        title.toUpperCase()+
+        " SAVED!"
+    );
 
 }
 
@@ -4504,6 +4676,18 @@ function saveSettings(){
         JSON.stringify(JEM_SETTINGS)
     );
 
+    const premiumPriceDisplay =
+        document.getElementById(
+            "premiumPriceDisplay"
+        );
+
+    if(premiumPriceDisplay){
+
+        premiumPriceDisplay.textContent =
+            "$"+JEM_SETTINGS.premiumTicketPrice.toFixed(2);
+
+    }
+
     toast("SETTINGS SAVED");
 
 }
@@ -4631,10 +4815,20 @@ async function startJEM(){
 
     if(savedLocation){
 
-        document.getElementById(
-            "locationSelect"
-        ).value =
-            savedLocation;
+        const locationSelect =
+            document.getElementById(
+                "locationSelect"
+            );
+
+        if(
+            [...locationSelect.options]
+                .some(option=>option.value===savedLocation)
+        ){
+
+            locationSelect.value =
+                savedLocation;
+
+        }
 
     }
 
@@ -4649,6 +4843,18 @@ async function startJEM(){
     loadIntroVideo();
 
     updateAccountUI();
+
+    const premiumPriceDisplay =
+        document.getElementById(
+            "premiumPriceDisplay"
+        );
+
+    if(premiumPriceDisplay){
+
+        premiumPriceDisplay.textContent =
+            "$"+JEM_SETTINGS.premiumTicketPrice.toFixed(2);
+
+    }
 
 }
 
