@@ -3,24 +3,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#e11d2e">
 <title>JEM Theatres</title>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:Arial,Helvetica,sans-serif;background:#080808;color:#fff}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#080808;
+    color:#fff;
+    overflow-x:hidden;
+}
+body.modal-open{overflow:hidden}
 button,input,select{font:inherit}
-button{cursor:pointer}
-a{color:inherit;text-decoration:none}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+img{max-width:100%;display:block}
 
 :root{
     --red:#e11d2e;
     --bright-red:#ff3344;
     --dark-red:#8f101c;
-    --red-glow:#3a080d;
 }
 
+/* =========================
+   NAVBAR
+========================= */
 .navbar{
     position:sticky;
     top:0;
@@ -30,7 +40,7 @@ a{color:inherit;text-decoration:none}
     border-bottom:1px solid #3a171b;
     display:flex;
     align-items:center;
-    gap:22px;
+    gap:20px;
     padding:0 35px;
     backdrop-filter:blur(12px);
 }
@@ -49,11 +59,13 @@ a{color:inherit;text-decoration:none}
     align-items:center;
     flex:1;
 }
+
 .nav-links a{
     color:#bbb;
     font-size:13px;
     font-weight:bold;
     letter-spacing:1px;
+    white-space:nowrap;
 }
 .nav-links a:hover{color:var(--red)}
 
@@ -63,26 +75,59 @@ a{color:inherit;text-decoration:none}
     color:#fff;
     padding:10px 12px;
     border-radius:7px;
+    max-width:180px;
 }
 
-.nav-btn{
+.nav-btn,
+.gold-btn{
     background:var(--red);
     border:0;
     color:#fff;
     font-weight:900;
-    padding:10px 15px;
     border-radius:7px;
+    padding:11px 15px;
+    min-height:44px;
 }
-.nav-btn:hover,.gold-btn:hover{background:var(--bright-red)}
-.nav-btn.dark{
-    background:#171717;
+
+.nav-btn:hover,
+.gold-btn:hover{
+    background:var(--bright-red);
+}
+
+.nav-btn.dark,
+.outline-btn{
+    background:transparent;
     border:1px solid #444;
+    color:#fff;
 }
-.nav-btn.dark:hover{
+
+.nav-btn.dark:hover,
+.outline-btn:hover{
     border-color:var(--red);
     color:var(--red);
 }
 
+.outline-btn,
+.danger-btn{
+    border-radius:7px;
+    padding:11px 15px;
+    font-weight:900;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.danger-btn{
+    background:#7f1019;
+    border:0;
+    color:#fff;
+}
+.danger-btn:hover{background:#b31322}
+
+/* =========================
+   HERO
+========================= */
 .hero{
     min-height:650px;
     display:flex;
@@ -94,36 +139,47 @@ a{color:inherit;text-decoration:none}
         radial-gradient(circle at 80% 30%,#430d13 0,transparent 30%),
         linear-gradient(120deg,#080808,#16090b 60%,#050505);
 }
+
 .hero:after{
     content:"";
     position:absolute;
     inset:0;
-    background:linear-gradient(90deg,#080808 5%,rgba(8,8,8,.75),transparent);
+    background:linear-gradient(
+        90deg,
+        #080808 5%,
+        rgba(8,8,8,.75),
+        transparent
+    );
     pointer-events:none;
 }
+
 .hero-content{
     max-width:650px;
     position:relative;
     z-index:2;
 }
+
 .eyebrow{
     color:var(--red);
     font-size:13px;
     letter-spacing:4px;
     font-weight:900;
 }
+
 .hero h1{
     font-size:clamp(50px,8vw,100px);
     line-height:.9;
     margin:18px 0;
     letter-spacing:-5px;
 }
+
 .hero p{
     color:#bbb;
     line-height:1.7;
     max-width:570px;
     font-size:17px;
 }
+
 .hero-buttons{
     display:flex;
     gap:12px;
@@ -131,111 +187,46 @@ a{color:inherit;text-decoration:none}
     flex-wrap:wrap;
 }
 
-.gold-btn,.outline-btn,.danger-btn{
-    border:0;
-    border-radius:7px;
-    padding:13px 19px;
-    font-weight:900;
-    letter-spacing:.5px;
-}
-.gold-btn{background:var(--red);color:#fff}
-.outline-btn{
-    background:transparent;
-    border:1px solid #555;
-    color:#fff;
-}
-.outline-btn:hover{
-    border-color:var(--red);
-    color:var(--red);
-}
-.danger-btn{
-    background:#7f1019;
-    color:#fff;
-}
-.danger-btn:hover{background:#b31322}
-
+/* =========================
+   SECTIONS
+========================= */
 .section{padding:80px 6%}
+
 .section-header{
     display:flex;
     justify-content:space-between;
     align-items:end;
     margin-bottom:30px;
 }
-.section h2{font-size:42px;margin-top:8px}
-.muted{color:#888}
 
-.movie-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-    gap:25px;
+.section h2{
+    font-size:42px;
+    margin-top:8px;
 }
-.movie-card{
-    background:#111;
-    border:1px solid #292929;
-    border-radius:10px;
-    overflow:hidden;
-    transition:.25s;
-}
-.movie-card:hover{
-    transform:translateY(-5px);
-    border-color:var(--red);
-    box-shadow:0 10px 35px rgba(225,29,46,.12);
-}
-.movie-card img{
-    width:100%;
-    aspect-ratio:2/3;
-    object-fit:cover;
-    display:block;
-    background:#1a1a1a;
-}
-.movie-card-info{padding:17px}
-.movie-card h3{font-size:19px;margin-bottom:7px}
-.movie-meta{
-    color:#888;
-    font-size:13px;
-    margin-bottom:14px;
-}
-.showtimes{
-    display:flex;
-    flex-wrap:wrap;
-    gap:7px;
-}
-.showtime{
-    background:#1c1c1c;
-    color:#fff;
-    border:1px solid #3a3a3a;
-    padding:8px 10px;
-    border-radius:6px;
-    font-size:12px;
-}
-.showtime:hover{
-    border-color:var(--red);
-    color:var(--red);
-}
-.card-actions{
-    display:flex;
-    gap:8px;
-    margin-top:12px;
-    flex-wrap:wrap;
-}
+
+.muted{color:#888}
 
 .intro-section{background:#101010}
 
 .intro-frame{
+    position:relative;
     width:100%;
     aspect-ratio:16/9;
-    max-height:650px;
     background:#000;
     border:1px solid #333;
     border-radius:12px;
     margin-top:25px;
     overflow:hidden;
 }
+
 .intro-frame iframe{
+    position:absolute;
+    inset:0;
     width:100%;
     height:100%;
     border:0;
 }
+
 .intro-video{
     width:100%;
     max-height:650px;
@@ -244,13 +235,106 @@ a{color:inherit;text-decoration:none}
     border-radius:12px;
     margin-top:25px;
 }
+
 .intro-caption{
     text-align:center;
     color:#888;
     margin-top:15px;
 }
 
+/* =========================
+   MOVIES
+========================= */
+.movie-grid,
+.food-grid,
+.admin-grid{
+    display:grid;
+    gap:20px;
+}
+
+.movie-grid{
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+}
+
+.food-grid{
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+}
+
+.movie-card{
+    background:#111;
+    border:1px solid #292929;
+    border-radius:10px;
+    overflow:hidden;
+    transition:.25s;
+    min-width:0;
+}
+
+.movie-card:hover{
+    transform:translateY(-5px);
+    border-color:var(--red);
+    box-shadow:0 10px 35px rgba(225,29,46,.12);
+}
+
+.movie-card img{
+    width:100%;
+    aspect-ratio:2/3;
+    object-fit:cover;
+    background:#171717;
+}
+
+.movie-card-info{padding:17px}
+
+.movie-card h3{
+    font-size:19px;
+    margin-bottom:7px;
+    overflow-wrap:anywhere;
+}
+
+.movie-meta{
+    color:#888;
+    font-size:13px;
+    margin-bottom:14px;
+    line-height:1.5;
+}
+
+.showtimes{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.showtime{
+    background:#1c1c1c;
+    color:#fff;
+    border:1px solid #3a3a3a;
+    padding:9px 10px;
+    border-radius:6px;
+    font-size:12px;
+    min-height:38px;
+}
+
+.showtime:hover{
+    border-color:var(--red);
+    color:var(--red);
+}
+
+.card-actions{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+    flex-wrap:wrap;
+}
+
+.card-actions .outline-btn{
+    width:100%;
+}
+
+.trailer-btn{
+    width:100%;
+}
+
 .coming-card{position:relative}
+
 .coming-badge{
     position:absolute;
     top:12px;
@@ -264,12 +348,16 @@ a{color:inherit;text-decoration:none}
     z-index:2;
 }
 
+/* =========================
+   PREMIUM
+========================= */
 .premium{
     background:
         radial-gradient(circle at 50% 0,#430d13,transparent 45%),
         #12090b;
     text-align:center;
 }
+
 .premium-box{
     max-width:850px;
     margin:auto;
@@ -278,12 +366,15 @@ a{color:inherit;text-decoration:none}
     padding:55px 30px;
     box-shadow:0 0 50px rgba(225,29,46,.08);
 }
+
 .premium h2{color:var(--red)}
+
 .premium-price{
     font-size:38px;
     font-weight:900;
     margin:15px 0;
 }
+
 .premium-list{
     display:flex;
     justify-content:center;
@@ -293,58 +384,63 @@ a{color:inherit;text-decoration:none}
     margin:25px 0;
 }
 
-.food-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-    gap:18px;
-}
-.food-card{
+/* =========================
+   FOOD
+========================= */
+.food-card,
+.premium-food-card{
     background:#111;
     border:1px solid #292929;
-    padding:25px;
     border-radius:10px;
-    transition:.2s;
+    padding:22px;
+    min-width:0;
 }
-.food-card:hover{
+
+.food-card:hover,
+.premium-food-card:hover{
     border-color:var(--red);
     transform:translateY(-3px);
 }
-.food-icon{
+
+.food-icon,
+.premium-food-icon{
     font-size:40px;
     margin-bottom:15px;
 }
-.food-price{
+
+.food-price,
+.premium-food-price{
     color:var(--red);
-    font-weight:bold;
+    font-weight:900;
     margin:10px 0 15px;
 }
 
 .premium-food-card{
     background:linear-gradient(145deg,#181010,#0e0e0e);
-    border:1px solid #6f1821;
-    border-radius:12px;
-    padding:22px;
+    border-color:#6f1821;
     margin:12px 0;
 }
-.premium-food-card:hover{border-color:var(--red)}
-.premium-food-icon{font-size:42px;margin-bottom:10px}
-.premium-food-name{font-size:18px;font-weight:900}
+
+.premium-food-name{
+    font-size:18px;
+    font-weight:900;
+}
+
 .premium-food-description{
     color:#888;
     font-size:13px;
     line-height:1.5;
     margin:7px 0;
 }
-.premium-food-price{
-    color:var(--red);
-    font-weight:900;
-    margin:10px 0;
-}
 
+/* =========================
+   REWARDS / FOOTER
+========================= */
 .rewards{
     background:#111;
     text-align:center;
 }
+
 .rewards-box{
     max-width:800px;
     margin:auto;
@@ -357,6 +453,9 @@ footer{
     text-align:center;
 }
 
+/* =========================
+   POPUPS
+========================= */
 .popup{
     position:fixed;
     inset:0;
@@ -366,8 +465,11 @@ footer{
     align-items:center;
     justify-content:center;
     padding:20px;
+    overscroll-behavior:contain;
 }
+
 .popup.show{display:flex}
+
 .modal{
     background:#111;
     border:1px solid #492026;
@@ -375,22 +477,66 @@ footer{
     width:min(900px,100%);
     max-height:90vh;
     overflow:auto;
+    -webkit-overflow-scrolling:touch;
     padding:28px;
     position:relative;
+    overscroll-behavior:contain;
 }
+
 .close{
     position:absolute;
-    top:15px;
-    right:18px;
+    top:10px;
+    right:12px;
     background:none;
     border:0;
     color:#aaa;
-    font-size:25px;
+    font-size:30px;
+    width:42px;
+    height:42px;
+    z-index:10;
 }
-.close:hover{color:var(--red)}
-.modal h2{margin-bottom:10px}
-.modal-sub{color:#888;margin-bottom:25px}
 
+.close:hover{color:var(--red)}
+
+.modal h2{
+    margin-bottom:10px;
+    padding-right:45px;
+}
+
+.modal-sub{
+    color:#888;
+    margin-bottom:25px;
+    line-height:1.5;
+}
+
+/* =========================
+   TRAILER PLAYER
+========================= */
+.trailer-player{
+    width:100%;
+    aspect-ratio:16/9;
+    background:#000;
+    border-radius:10px;
+    overflow:hidden;
+    margin:20px 0;
+}
+
+.trailer-player iframe{
+    width:100%;
+    height:100%;
+    border:0;
+}
+
+.trailer-player video{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:#000;
+}
+
+/* =========================
+   SEATS
+========================= */
 .seat-map{
     display:grid;
     grid-template-columns:repeat(7,45px);
@@ -398,6 +544,7 @@ footer{
     justify-content:center;
     margin:30px auto;
 }
+
 .seat{
     width:45px;
     height:40px;
@@ -406,26 +553,34 @@ footer{
     color:#fff;
     border-radius:6px 6px 10px 10px;
     font-size:11px;
+    touch-action:manipulation;
 }
-.seat:hover:not(:disabled){border-color:var(--red)}
+
+.seat:hover:not(:disabled){
+    border-color:var(--red);
+}
+
 .seat.taken{
     background:#555;
     color:#888;
     border-color:#555;
     cursor:not-allowed;
 }
+
 .seat.selected{
     background:var(--red);
     border-color:var(--bright-red);
 }
+
 .seat.premium-seat{
     background:#3a0d13;
     border-color:#8f1d29;
 }
+
 .seat.premium-seat.selected{
     background:var(--red);
-    color:#fff;
 }
+
 .seat-legend{
     display:flex;
     justify-content:center;
@@ -434,11 +589,13 @@ footer{
     color:#aaa;
     font-size:12px;
 }
+
 .legend-item{
     display:flex;
     align-items:center;
     gap:6px;
 }
+
 .legend-box{
     width:18px;
     height:18px;
@@ -446,10 +603,14 @@ footer{
     background:#222;
     border:1px solid #555;
 }
+
 .legend-box.taken{background:#555}
 .legend-box.selected{background:var(--red)}
 .legend-box.premium{background:#7e1721}
 
+/* =========================
+   CART
+========================= */
 .cart-row{
     display:flex;
     justify-content:space-between;
@@ -458,23 +619,23 @@ footer{
     padding:15px 0;
     gap:15px;
 }
+
 .qty{
     display:flex;
     align-items:center;
     gap:10px;
+    flex-shrink:0;
 }
+
 .qty button{
-    width:30px;
-    height:30px;
+    width:34px;
+    height:34px;
     border-radius:5px;
     border:1px solid #444;
     background:#222;
     color:#fff;
 }
-.qty button:hover{
-    border-color:var(--red);
-    color:var(--red);
-}
+
 .checkout-total{
     font-size:25px;
     font-weight:900;
@@ -482,14 +643,22 @@ footer{
     text-align:right;
 }
 
+/* =========================
+   FORMS
+========================= */
 .form-group{margin-bottom:15px}
-.form-group label{
+
+.form-group label,
+.admin-movie-card label{
     display:block;
     color:#aaa;
     margin-bottom:7px;
     font-size:13px;
 }
-.form-group input{
+
+.form-group input,
+.admin-movie-card input,
+.setting input{
     width:100%;
     padding:13px;
     background:#181818;
@@ -497,15 +666,25 @@ footer{
     color:#fff;
     border-radius:7px;
     outline:none;
+    min-height:46px;
 }
-.form-group input:focus{border-color:var(--red)}
 
+.form-group input:focus,
+.admin-movie-card input:focus,
+.setting input:focus{
+    border-color:var(--red);
+}
+
+/* =========================
+   PROFILE
+========================= */
 .profile-header{
     display:flex;
     align-items:center;
     gap:20px;
     margin-bottom:25px;
 }
+
 .pfp{
     width:90px;
     height:90px;
@@ -513,16 +692,22 @@ footer{
     object-fit:cover;
     border:3px solid var(--red);
     background:#222;
+    flex-shrink:0;
 }
+
 .pfp-small{
-    width:35px;
-    height:35px;
+    width:30px;
+    height:30px;
     border-radius:50%;
     object-fit:cover;
     border:2px solid var(--red);
     display:none;
+    vertical-align:middle;
+    margin-right:5px;
 }
-.pfp-drop{
+
+.pfp-drop,
+.drop-zone{
     border:2px dashed #555;
     border-radius:12px;
     padding:30px 20px;
@@ -530,51 +715,79 @@ footer{
     background:#151515;
     transition:.2s;
     margin:20px 0;
+    cursor:pointer;
 }
-.pfp-drop:hover,.pfp-drop.dragging{
+
+.pfp-drop:hover,
+.pfp-drop.dragging,
+.drop-zone:hover,
+.drop-zone.dragging{
     border-color:var(--red);
     background:#210b0e;
 }
-.pfp-drop strong{
+
+.pfp-drop strong,
+.drop-zone strong{
     display:block;
     font-size:17px;
     margin-bottom:7px;
 }
-.pfp-drop span{color:#888;font-size:13px}
-.pfp-drop input{display:none}
 
+.pfp-drop span,
+.drop-zone span{
+    color:#888;
+    font-size:13px;
+}
+
+.pfp-drop input,
+.drop-zone input{
+    display:none;
+}
+
+/* =========================
+   ADMIN
+========================= */
 .admin-tabs{
     display:flex;
     gap:7px;
     flex-wrap:wrap;
     margin:20px 0;
 }
+
 .admin-tabs button{
     background:#1b1b1b;
     border:1px solid #444;
     color:#fff;
     padding:10px 13px;
     border-radius:6px;
+    min-height:42px;
 }
+
 .admin-tabs button.active{
     background:var(--red);
     border-color:var(--red);
 }
+
 .admin-section{display:none}
 .admin-section.active{display:block}
 
 .admin-grid{
-    display:grid;
     grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
-    gap:18px;
 }
+
 .admin-movie-card{
     background:#171717;
     border:1px solid #333;
     border-radius:10px;
     padding:18px;
+    min-width:0;
 }
-.admin-movie-card h3{margin-bottom:15px}
+
+.admin-movie-card h3{
+    margin-bottom:15px;
+    overflow-wrap:anywhere;
+}
+
 .admin-poster-preview{
     width:100%;
     aspect-ratio:2/3;
@@ -583,49 +796,19 @@ footer{
     border-radius:7px;
     margin-bottom:15px;
 }
-.admin-movie-card label{
-    display:block;
-    color:#999;
-    font-size:12px;
-    margin:12px 0 5px;
-}
-.admin-movie-card input{
-    width:100%;
-    background:#101010;
-    color:#fff;
-    border:1px solid #444;
-    padding:10px;
-    border-radius:6px;
-}
-.admin-movie-card input:focus{
-    border-color:var(--red);
-    outline:none;
-}
-.drop-zone{
-    border:2px dashed #555;
-    border-radius:8px;
-    padding:22px 10px;
-    text-align:center;
-    margin:15px 0;
-    color:#aaa;
-    cursor:pointer;
-}
-.drop-zone:hover,.drop-zone.dragging{
-    border-color:var(--red);
-    color:var(--red);
-    background:#210b0e;
-}
-.drop-zone strong{
-    display:block;
-    color:#fff;
-    margin-bottom:5px;
-}
+
 .admin-actions{
     display:flex;
     gap:8px;
     flex-wrap:wrap;
     margin-top:15px;
 }
+
+.admin-actions button{
+    flex:1;
+    min-width:120px;
+}
+
 .admin-video{
     width:100%;
     max-height:400px;
@@ -633,31 +816,29 @@ footer{
     border-radius:10px;
     margin-bottom:20px;
 }
+
 .settings-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:15px;
 }
+
 .setting{
     background:#171717;
     padding:18px;
     border:1px solid #333;
     border-radius:8px;
 }
+
 .setting label{
     display:block;
     color:#aaa;
     margin-bottom:7px;
 }
-.setting input{
-    width:100%;
-    background:#0d0d0d;
-    color:#fff;
-    border:1px solid #444;
-    padding:10px;
-    border-radius:6px;
-}
 
+/* =========================
+   TOAST
+========================= */
 .toast{
     position:fixed;
     right:20px;
@@ -671,34 +852,466 @@ footer{
     opacity:0;
     transition:.25s;
     z-index:9999;
+    max-width:calc(100vw - 40px);
 }
+
 .toast.show{
     transform:translateY(0);
     opacity:1;
 }
 
+/* =========================
+   MOBILE
+========================= */
 @media(max-width:850px){
+
     .navbar{
         height:auto;
         min-height:72px;
-        padding:15px;
+        padding:12px 15px;
+        gap:10px;
         flex-wrap:wrap;
     }
+
+    .logo{
+        font-size:21px;
+        letter-spacing:2px;
+        flex:1;
+    }
+
+    .nav-btn{
+        padding:9px 11px;
+    }
+
+    .location-select{
+        order:4;
+        width:100%;
+        max-width:none;
+    }
+
     .nav-links{
         order:5;
         width:100%;
-        overflow:auto;
-        padding-bottom:5px;
+        overflow-x:auto;
+        overflow-y:hidden;
+        padding:4px 0 7px;
+        gap:18px;
+        flex:none;
+        scrollbar-width:none;
     }
-    .hero{padding:60px 25px}
-    .section{padding:60px 20px}
+
+    .nav-links::-webkit-scrollbar{display:none}
+
+    .nav-links a{
+        font-size:11px;
+    }
+
+    .hero{
+        min-height:580px;
+        padding:60px 25px;
+    }
+
+    .hero h1{
+        letter-spacing:-3px;
+    }
+
+    .section{
+        padding:60px 20px;
+    }
+
+    .section h2{
+        font-size:34px;
+    }
+
+    .movie-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:15px;
+    }
+
+    .food-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+    }
+
+    .food-card{
+        padding:18px;
+    }
+
     .seat-map{
         grid-template-columns:repeat(7,38px);
         gap:6px;
+        width:max-content;
+        max-width:100%;
     }
+
     .seat{
         width:38px;
         height:36px;
+    }
+
+    .modal{
+        width:100%;
+        max-height:92vh;
+        padding:22px 18px;
+    }
+
+    .popup{
+        padding:10px;
+    }
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        padding:10px 12px 8px;
+    }
+
+    .logo{
+        font-size:18px;
+        letter-spacing:1.5px;
+    }
+
+    .nav-btn{
+        font-size:11px;
+        padding:8px 9px;
+    }
+
+    .location-select{
+        font-size:13px;
+        padding:10px;
+    }
+
+    .nav-links{
+        gap:15px;
+    }
+
+    .nav-links a{
+        font-size:10px;
+        letter-spacing:.7px;
+    }
+
+    .hero{
+        min-height:560px;
+        padding:55px 18px;
+    }
+
+    .hero h1{
+        font-size:clamp(48px,15vw,76px);
+        letter-spacing:-3px;
+    }
+
+    .hero p{
+        font-size:15px;
+        line-height:1.6;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+    }
+
+    .hero-buttons button{
+        width:100%;
+    }
+
+    .section{
+        padding:45px 14px;
+    }
+
+    .section h2{
+        font-size:29px;
+    }
+
+    .eyebrow{
+        font-size:10px;
+        letter-spacing:2.5px;
+    }
+
+    .movie-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+    }
+
+    .movie-card{
+        border-radius:8px;
+    }
+
+    .movie-card-info{
+        padding:11px;
+    }
+
+    .movie-card h3{
+        font-size:15px;
+        line-height:1.2;
+    }
+
+    .movie-meta{
+        font-size:11px;
+        line-height:1.35;
+        margin-bottom:10px;
+    }
+
+    .showtimes{
+        gap:5px;
+    }
+
+    .showtime{
+        padding:7px;
+        font-size:10px;
+        min-height:34px;
+        flex:1;
+        min-width:45%;
+    }
+
+    .trailer-btn{
+        width:100%;
+        min-height:48px;
+        font-size:12px;
+    }
+
+    .intro-frame{
+        margin-top:18px;
+        border-radius:8px;
+        width:100%;
+        aspect-ratio:16/9;
+    }
+
+    .intro-frame iframe{
+        width:100%;
+        height:100%;
+    }
+
+    .intro-video{
+        width:100%;
+        height:auto;
+        min-height:0;
+        border-radius:8px;
+    }
+
+    .premium-box{
+        padding:35px 17px;
+        border-radius:12px;
+    }
+
+    .premium-price{
+        font-size:32px;
+    }
+
+    .premium-list{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+        font-size:12px;
+    }
+
+    .premium-box .gold-btn{
+        width:100%;
+    }
+
+    .food-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:9px;
+    }
+
+    .food-card{
+        padding:14px;
+        border-radius:8px;
+    }
+
+    .food-icon{
+        font-size:31px;
+        margin-bottom:9px;
+    }
+
+    .food-card h3{
+        font-size:14px;
+        line-height:1.2;
+    }
+
+    .food-price{
+        font-size:13px;
+        margin:8px 0 10px;
+    }
+
+    .food-card .gold-btn{
+        width:100%;
+    }
+
+    .popup{
+        padding:0;
+        align-items:flex-end;
+    }
+
+    .modal{
+        width:100%;
+        max-width:none;
+        max-height:94vh;
+        border-radius:16px 16px 0 0;
+        padding:22px 15px;
+        padding-bottom:calc(22px + env(safe-area-inset-bottom));
+    }
+
+    .close{
+        top:8px;
+        right:9px;
+    }
+
+    .modal h2{
+        font-size:24px;
+    }
+
+    .modal-sub{
+        font-size:13px;
+        margin-bottom:18px;
+    }
+
+    .seat-map{
+        grid-template-columns:repeat(7,34px);
+        gap:5px;
+        margin:20px auto;
+    }
+
+    .seat{
+        width:34px;
+        height:32px;
+        font-size:9px;
+    }
+
+    .seat-legend{
+        gap:10px;
+        font-size:10px;
+    }
+
+    .legend-box{
+        width:15px;
+        height:15px;
+    }
+
+    .cart-row{
+        gap:8px;
+        padding:12px 0;
+        font-size:13px;
+    }
+
+    .qty{
+        gap:6px;
+    }
+
+    .qty button{
+        width:32px;
+        height:32px;
+    }
+
+    .checkout-total{
+        font-size:21px;
+    }
+
+    .profile-header{
+        gap:13px;
+    }
+
+    .pfp{
+        width:70px;
+        height:70px;
+    }
+
+    .profile-header h2{
+        font-size:21px;
+    }
+
+    .pfp-drop{
+        padding:27px 12px;
+    }
+
+    .admin-tabs{
+        overflow-x:auto;
+        flex-wrap:nowrap;
+        padding-bottom:5px;
+        scrollbar-width:none;
+    }
+
+    .admin-tabs::-webkit-scrollbar{
+        display:none;
+    }
+
+    .admin-tabs button{
+        flex:0 0 auto;
+        font-size:11px;
+    }
+
+    .admin-grid,
+    .settings-grid{
+        grid-template-columns:1fr;
+    }
+
+    .admin-actions{
+        flex-direction:column;
+    }
+
+    .admin-actions button{
+        width:100%;
+    }
+
+    .premium-food-card{
+        padding:17px;
+    }
+
+    .premium-food-card .gold-btn{
+        width:100%;
+    }
+
+    .toast{
+        left:12px;
+        right:12px;
+        bottom:calc(12px + env(safe-area-inset-bottom));
+        max-width:none;
+        text-align:center;
+        font-size:12px;
+    }
+
+    footer{
+        padding:28px 15px;
+        font-size:11px;
+        line-height:1.5;
+    }
+}
+
+@media(max-width:380px){
+
+    .logo{
+        font-size:16px;
+    }
+
+    .nav-btn{
+        font-size:10px;
+        padding:7px;
+    }
+
+    .movie-grid{
+        gap:7px;
+    }
+
+    .movie-card-info{
+        padding:9px;
+    }
+
+    .movie-card h3{
+        font-size:13px;
+    }
+
+    .showtime{
+        font-size:9px;
+        padding:6px 4px;
+    }
+
+    .seat-map{
+        grid-template-columns:repeat(7,30px);
+        gap:4px;
+    }
+
+    .seat{
+        width:30px;
+        height:29px;
+        font-size:8px;
     }
 }
 </style>
@@ -706,6 +1319,9 @@ footer{
 
 <body>
 
+<!-- =========================
+     NAVBAR
+========================= -->
 <nav class="navbar">
 
     <div class="logo">
@@ -744,8 +1360,10 @@ footer{
 
 </nav>
 
+<!-- =========================
+     HERO
+========================= -->
 <section class="hero">
-
     <div class="hero-content">
 
         <span class="eyebrow">WELCOME TO JEM THEATRES</span>
@@ -763,7 +1381,6 @@ footer{
         </p>
 
         <div class="hero-buttons">
-
             <button class="gold-btn" onclick="scrollToMovies()">
                 BUY TICKETS
             </button>
@@ -771,22 +1388,21 @@ footer{
             <button class="outline-btn" onclick="scrollToIntro()">
                 WATCH OUR INTRO
             </button>
-
         </div>
 
     </div>
-
 </section>
 
+<!-- =========================
+     INTRO
+========================= -->
 <section class="section intro-section" id="intro">
 
     <div class="section-header">
-
         <div>
             <span class="eyebrow">JEM THEATRES</span>
             <h2>OUR INTRO</h2>
         </div>
-
     </div>
 
     <p class="muted">
@@ -796,8 +1412,9 @@ footer{
     <div class="intro-frame" id="youtubeIntro">
         <iframe
             id="introYoutube"
-            src="https://www.youtube.com/embed/6ZfuNTqbHE8?rel=0"
+            src="https://www.youtube.com/embed/6ZfuNTqbHE8?rel=0&playsinline=1"
             title="JEM Theatres Intro"
+            loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen>
         </iframe>
@@ -808,6 +1425,8 @@ footer{
         class="intro-video"
         controls
         playsinline
+        webkit-playsinline
+        preload="metadata"
         style="display:none">
     </video>
 
@@ -817,36 +1436,41 @@ footer{
 
 </section>
 
+<!-- =========================
+     MOVIES
+========================= -->
 <section class="section" id="movies">
 
     <div class="section-header">
-
         <div>
             <span class="eyebrow">NOW PLAYING</span>
             <h2>WHAT'S PLAYING</h2>
         </div>
-
     </div>
 
     <div id="movieGrid" class="movie-grid"></div>
 
 </section>
 
+<!-- =========================
+     COMING SOON
+========================= -->
 <section class="section" id="coming">
 
     <div class="section-header">
-
         <div>
             <span class="eyebrow">UP NEXT</span>
             <h2>COMING SOON</h2>
         </div>
-
     </div>
 
     <div id="comingSoonGrid" class="movie-grid"></div>
 
 </section>
 
+<!-- =========================
+     PREMIUM
+========================= -->
 <section class="section premium" id="premium">
 
     <div class="premium-box">
@@ -878,15 +1502,16 @@ footer{
 
 </section>
 
+<!-- =========================
+     FOOD
+========================= -->
 <section class="section" id="food">
 
     <div class="section-header">
-
         <div>
             <span class="eyebrow">CONCESSIONS</span>
             <h2>FOOD & DRINKS</h2>
         </div>
-
     </div>
 
     <div id="foodGrid" class="food-grid"></div>
@@ -899,6 +1524,9 @@ footer{
 
 </section>
 
+<!-- =========================
+     REWARDS
+========================= -->
 <section class="section rewards" id="rewards">
 
     <div class="rewards-box">
@@ -907,7 +1535,7 @@ footer{
 
         <h2>GET REWARDED FOR MOVIE NIGHT</h2>
 
-        <p class="muted" style="margin:20px 0;">
+        <p class="muted" style="margin:20px 0">
             Earn points every time you visit JEM Theatres.
             More movies means more rewards.
         </p>
@@ -924,20 +1552,33 @@ footer{
     © 2026 JEM THEATRES — YOUR HOMETOWN SHOWPLACE FOR GREAT MOVIES
 </footer>
 
-<div id="popup" class="popup" onclick="closePopupOutside(event)">
+<!-- =========================
+     POPUP
+========================= -->
+<div
+    id="popup"
+    class="popup"
+    onclick="closePopupOutside(event)">
+
     <div class="modal" id="modal">
-        <button class="close" onclick="closePopup()">×</button>
+
+        <button class="close" onclick="closePopup()">
+            ×
+        </button>
+
         <div id="modalContent"></div>
+
     </div>
+
 </div>
 
 <div id="toast" class="toast"></div>
 
 <script>
 
-/* ==========================================================
-   JEM THEATRES
-========================================================== */
+/* =========================================================
+   JEM SETTINGS
+========================================================= */
 
 const JEM_SETTINGS = {
     ticketPrice:12.50,
@@ -948,9 +1589,9 @@ const JEM_SETTINGS = {
 };
 
 
-/* ==========================================================
+/* =========================================================
    MOVIES
-========================================================== */
+========================================================= */
 
 const movies = {
 
@@ -960,7 +1601,12 @@ const movies = {
         genre:"Action • Adventure • Superhero",
         poster:"https://image.tmdb.org/t/p/w780/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
         trailer:"https://www.youtube.com/watch?v=6ZfuNTqbHE8",
-        times:["12:00 PM","3:15 PM","6:30 PM","9:45 PM"]
+        times:[
+            "12:00 PM",
+            "3:15 PM",
+            "6:30 PM",
+            "9:45 PM"
+        ]
     },
 
     scarymovie6:{
@@ -969,7 +1615,12 @@ const movies = {
         genre:"Comedy • Horror",
         poster:"https://image.tmdb.org/t/p/w780/bqOKJrZFR9KpqWE607dw6KOdKCj.jpg",
         trailer:"https://www.youtube.com/watch?v=cGgWAHXuTKc",
-        times:["11:30 AM","2:45 PM","6:00 PM","9:15 PM"]
+        times:[
+            "11:30 AM",
+            "2:45 PM",
+            "6:00 PM",
+            "9:15 PM"
+        ]
     },
 
     scream:{
@@ -977,8 +1628,13 @@ const movies = {
         rating:"R",
         genre:"Horror • Mystery • Thriller",
         poster:"https://image.tmdb.org/t/p/w780/lr9ZIrmuwVmZhpZuTCW8e2tT26U.jpg",
-        trailer:"https://www.youtube.com/watch?v=i3J6ACKQ7K0&t=11s",
-        times:["1:00 PM","4:00 PM","7:00 PM","10:00 PM"]
+        trailer:"https://www.youtube.com/watch?v=i3J6ACKQ7K0",
+        times:[
+            "1:00 PM",
+            "4:00 PM",
+            "7:00 PM",
+            "10:00 PM"
+        ]
     },
 
     halloween:{
@@ -986,16 +1642,21 @@ const movies = {
         rating:"R",
         genre:"Horror • Thriller",
         poster:"https://image.tmdb.org/t/p/w780/f7S2j1dYk2wW9VxZr2cM8Y1pVxU.jpg",
-        trailer:"https://www.youtube.com/watch?v=3JsrH8eUVOo&t=10s",
-        times:["12:30 PM","3:30 PM","6:45 PM","9:30 PM"]
+        trailer:"https://www.youtube.com/watch?v=3JsrH8eUVOo",
+        times:[
+            "12:30 PM",
+            "3:30 PM",
+            "6:45 PM",
+            "9:30 PM"
+        ]
     }
 
 };
 
 
-/* ==========================================================
+/* =========================================================
    COMING SOON
-========================================================== */
+========================================================= */
 
 const defaultComingSoon = [
 
@@ -1003,16 +1664,16 @@ const defaultComingSoon = [
         id:"backrooms",
         title:"The Backrooms Movie",
         date:"COMING SOON",
-        poster:"https://image.tmdb.org/t/p/w780/vpkNMkbisv5cTaIfCzUduYzXnjb.jpg",
-        trailer:"https://www.youtube.com/watch?v=0HjdiohVOik&t=4s"
+        poster:"https://via.placeholder.com/600x900/171717/e11d2e?text=BACKROOMS",
+        trailer:"https://www.youtube.com/watch?v=0HjdiohVOik"
     },
 
     {
         id:"spiderman",
         title:"Spider-Man: Brand New Day",
         date:"COMING SOON",
-        poster:"https://image.tmdb.org/t/p/w780/yyB2VJEW3an2xCdcYCPQhn9QERR.jpg",
-        trailer:"https://www.youtube.com/watch?v=62bIsvRcPv0&t=13s"
+        poster:"https://via.placeholder.com/600x900/171717/e11d2e?text=SPIDER-MAN",
+        trailer:"https://www.youtube.com/watch?v=62bIsvRcPv0"
     },
 
     {
@@ -1026,369 +1687,162 @@ const defaultComingSoon = [
 ];
 
 let comingSoon =
-    JSON.parse(localStorage.getItem("jemComingSoon")) ||
-    defaultComingSoon;
+    JSON.parse(localStorage.getItem("jemComingSoon") || "null")
+    || [...defaultComingSoon];
 
 
-/*
-IMPORTANT:
-If an older version of the site has the old Fantastic Four
-or Spider-Man entries saved in localStorage, automatically
-replace the defaults with the new lineup.
-*/
-
-function forceNewComingSoonLineup(){
-
-    const old =
-        localStorage.getItem("jemComingSoon");
-
-    if(!old){
-        return;
-    }
-
-    try{
-
-        const saved =
-            JSON.parse(old);
-
-        let changed = false;
-
-        saved.forEach(movie=>{
-
-            if(
-                movie.id==="fantastic-four" ||
-                movie.title==="The Fantastic Four"
-            ){
-
-                movie.id="backrooms";
-                movie.title="The Backrooms Movie";
-                movie.date="COMING SOON";
-                movie.poster=
-                    "https://image.tmdb.org/t/p/w780/vpkNMkbisv5cTaIfCzUduYzXnjb.jpg";
-                movie.trailer=
-                    "https://www.youtube.com/watch?v=0HjdiohVOik&t=4s";
-
-                changed=true;
-
-            }
-
-            if(
-                movie.id==="spiderman" ||
-                movie.title==="Spider-Man"
-            ){
-
-                movie.id="spiderman";
-                movie.title="Spider-Man: Brand New Day";
-                movie.poster=
-                    "https://image.tmdb.org/t/p/w780/yyB2VJEW3an2xCdcYCPQhn9QERR.jpg";
-                movie.trailer=
-                    "https://www.youtube.com/watch?v=62bIsvRcPv0&t=13s";
-
-                changed=true;
-
-            }
-
-        });
-
-        const hasBackrooms =
-            saved.some(x=>x.id==="backrooms");
-
-        if(!hasBackrooms){
-
-            saved.unshift(defaultComingSoon[0]);
-            changed=true;
-
-        }
-
-        if(changed){
-
-            localStorage.setItem(
-                "jemComingSoon",
-                JSON.stringify(saved)
-            );
-
-            comingSoon=saved;
-
-        }
-
-    }catch(e){
-
-        localStorage.removeItem("jemComingSoon");
-        comingSoon=[...defaultComingSoon];
-
-    }
-
-}
-
-
-/* ==========================================================
+/* =========================================================
    FOOD
-========================================================== */
+========================================================= */
 
 const regularFood = [
 
-    {id:"popcorn",name:"Large Popcorn",price:8.49,icon:"🍿"},
-    {id:"xlpopcorn",name:"XL Movie Popcorn",price:10.49,icon:"🍿"},
-    {id:"caramelpopcorn",name:"Caramel Popcorn",price:7.99,icon:"🍿"},
-    {id:"drink",name:"Large Fountain Drink",price:5.49,icon:"🥤"},
-    {id:"xlDrink",name:"XL Fountain Drink",price:6.49,icon:"🥤"},
-    {id:"lemonade",name:"Fresh Lemonade",price:5.99,icon:"🍋"},
-    {id:"slushie",name:"JEM Slushie",price:5.49,icon:"🧋"},
-    {id:"water",name:"Bottled Water",price:3.49,icon:"💧"},
-    {id:"candy",name:"Movie Candy",price:4.49,icon:"🍫"},
-    {id:"gummy",name:"Gummy Candy",price:4.49,icon:"🍬"},
-    {id:"sour",name:"Sour Candy",price:4.49,icon:"🍭"},
-    {id:"chips",name:"Classic Potato Chips",price:4.99,icon:"🥔"},
-    {id:"cheesechips",name:"Cheese Chips",price:5.49,icon:"🧀"},
-    {id:"nachos",name:"JEM Nachos",price:7.49,icon:"🧀"},
-    {id:"pretzel",name:"Soft Pretzel",price:6.99,icon:"🥨"},
-    {id:"hotdog",name:"JEM Hot Dog",price:7.99,icon:"🌭"},
-    {id:"chicken",name:"Chicken Tenders",price:9.49,icon:"🍗"},
-    {id:"skittles",name:"Skittles",price:4.49,icon:"🍬"},
-    {id:"mms",name:"M&M's",price:4.49,icon:"🍫"},
-    {id:"gushers",name:"Gushers",price:4.99,icon:"🍬"}
-];
+    ["popcorn","Large Popcorn",8.49,"🍿"],
+    ["xlpopcorn","XL Movie Popcorn",10.49,"🍿"],
+    ["caramelpopcorn","Caramel Popcorn",7.99,"🍿"],
+
+    ["drink","Large Fountain Drink",5.49,"🥤"],
+    ["xlDrink","XL Fountain Drink",6.49,"🥤"],
+    ["lemonade","Fresh Lemonade",5.99,"🍋"],
+    ["slushie","JEM Slushie",5.49,"🧋"],
+    ["water","Bottled Water",3.49,"💧"],
+
+    ["candy","Movie Candy",4.49,"🍫"],
+    ["gummy","Gummy Candy",4.49,"🍬"],
+    ["sour","Sour Candy",4.49,"🍭"],
+    ["skittles","Skittles",4.49,"🍬"],
+    ["mms","M&M's",4.49,"🍫"],
+    ["gushers","Gushers",4.99,"🍬"],
+
+    ["chips","Classic Potato Chips",4.99,"🥔"],
+    ["cheesechips","Cheese Chips",5.49,"🧀"],
+    ["nachos","JEM Nachos",7.49,"🧀"],
+    ["pretzel","Soft Pretzel",6.99,"🥨"],
+    ["hotdog","JEM Hot Dog",7.99,"🌭"],
+    ["chicken","Chicken Tenders",9.49,"🍗"]
+
+].map(x => ({
+    id:x[0],
+    name:x[1],
+    price:x[2],
+    icon:x[3]
+}));
+
 
 const premiumFood = [
 
-    {
-        id:"goldpopcorn",
-        name:"JEM Signature Truffle Popcorn",
-        price:14.99,
-        icon:"🍿",
-        description:"Fresh popcorn finished with premium truffle butter and sea salt."
-    },
+    [
+        "goldpopcorn",
+        "JEM Signature Truffle Popcorn",
+        14.99,
+        "🍿",
+        "Fresh popcorn finished with premium truffle butter and sea salt."
+    ],
 
-    {
-        id:"caramelgold",
-        name:"Golden Caramel Popcorn",
-        price:13.99,
-        icon:"🍿",
-        description:"Hand-finished caramel popcorn with a rich buttery glaze."
-    },
+    [
+        "caramelgold",
+        "Golden Caramel Popcorn",
+        13.99,
+        "🍿",
+        "Hand-finished caramel popcorn with a rich buttery glaze."
+    ],
 
-    {
-        id:"premiumdrink",
-        name:"Premium Craft Fountain Drink",
-        price:8.49,
-        icon:"🥤",
-        description:"A large fountain drink served with premium flavor choices."
-    },
+    [
+        "premiumdrink",
+        "Premium Craft Fountain Drink",
+        8.49,
+        "🥤",
+        "A large fountain drink served with premium flavor choices."
+    ],
 
-    {
-        id:"redvelvetshake",
-        name:"Red Velvet Movie Shake",
-        price:10.99,
-        icon:"🥤",
-        description:"A thick red velvet shake topped with whipped cream."
-    },
+    [
+        "redvelvetshake",
+        "Red Velvet Movie Shake",
+        10.99,
+        "🥤",
+        "A thick red velvet shake topped with whipped cream."
+    ],
 
-    {
-        id:"premiumchocolate",
-        name:"JEM Artisan Chocolate Box",
-        price:12.99,
-        icon:"🍫",
-        description:"Assorted premium chocolate pieces in a JEM gift box."
-    },
+    [
+        "premiumchocolate",
+        "JEM Artisan Chocolate Box",
+        12.99,
+        "🍫",
+        "Assorted premium chocolate pieces in a JEM gift box."
+    ],
 
-    {
-        id:"gourmetcandy",
-        name:"Gourmet Candy Collection",
-        price:11.99,
-        icon:"🍬",
-        description:"A premium selection of sweet and sour movie-night candy."
-    },
+    [
+        "gourmetcandy",
+        "Gourmet Candy Collection",
+        11.99,
+        "🍬",
+        "A premium selection of sweet and sour movie-night candy."
+    ],
 
-    {
-        id:"loadednachos",
-        name:"Loaded Premium Nachos",
-        price:12.99,
-        icon:"🧀",
-        description:"Crispy chips with warm cheese, jalapeños and premium toppings."
-    },
+    [
+        "loadednachos",
+        "Loaded Premium Nachos",
+        12.99,
+        "🧀",
+        "Crispy chips with warm cheese, jalapeños and premium toppings."
+    ],
 
-    {
-        id:"pretzelplatter",
-        name:"JEM Pretzel Platter",
-        price:13.99,
-        icon:"🥨",
-        description:"Warm soft pretzel bites served with gourmet dipping sauces."
-    },
+    [
+        "pretzelplatter",
+        "JEM Pretzel Platter",
+        13.99,
+        "🥨",
+        "Warm soft pretzel bites served with gourmet dipping sauces."
+    ],
 
-    {
-        id:"chickenplatter",
-        name:"Premium Chicken Tender Platter",
-        price:15.99,
-        icon:"🍗",
-        description:"Crispy tenders with dipping sauces and premium seasoning."
-    },
+    [
+        "chickenplatter",
+        "Premium Chicken Tender Platter",
+        15.99,
+        "🍗",
+        "Crispy tenders with dipping sauces and premium seasoning."
+    ],
 
-    {
-        id:"snackbox",
-        name:"JEM VIP Snack Box",
-        price:19.99,
-        icon:"🎁",
-        description:"A deluxe combination of popcorn, candy, chocolate and a drink."
-    }
+    [
+        "snackbox",
+        "JEM VIP Snack Box",
+        19.99,
+        "🎁",
+        "A deluxe combination of popcorn, candy, chocolate and a drink."
+    ]
 
-];
+].map(x => ({
+    id:x[0],
+    name:x[1],
+    price:x[2],
+    icon:x[3],
+    description:x[4]
+}));
 
-let foodCart=[];
-let premiumFoodCart=[];
 
+/* =========================================================
+   STATE
+========================================================= */
 
-/* ==========================================================
-   ACCOUNT
-========================================================== */
+let foodCart = [];
+let premiumFoodCart = [];
+
+let selectedSeats = [];
+let activeSeatInfo = null;
 
 let currentUser =
-    JSON.parse(localStorage.getItem("jemCurrentUser")) ||
-    null;
+    JSON.parse(localStorage.getItem("jemCurrentUser") || "null");
+
+let db = null;
 
 
-/* ==========================================================
-   DATABASE
-========================================================== */
-
-let db;
-
-function openDatabase(){
-
-    return new Promise((resolve,reject)=>{
-
-        const request=
-            indexedDB.open("JEMTheatresDB",1);
-
-        request.onupgradeneeded=event=>{
-
-            db=event.target.result;
-
-            if(!db.objectStoreNames.contains("uploads")){
-                db.createObjectStore("uploads");
-            }
-
-        };
-
-        request.onsuccess=event=>{
-            db=event.target.result;
-            resolve(db);
-        };
-
-        request.onerror=()=>{
-            reject(request.error);
-        };
-
-    });
-
-}
-
-function saveUpload(key,value){
-
-    return new Promise((resolve,reject)=>{
-
-        const transaction=
-            db.transaction("uploads","readwrite");
-
-        transaction.objectStore("uploads").put(value,key);
-
-        transaction.oncomplete=resolve;
-        transaction.onerror=()=>reject(transaction.error);
-
-    });
-
-}
-
-function getUpload(key){
-
-    return new Promise((resolve,reject)=>{
-
-        const transaction=
-            db.transaction("uploads","readonly");
-
-        const request=
-            transaction.objectStore("uploads").get(key);
-
-        request.onsuccess=()=>resolve(request.result);
-        request.onerror=()=>reject(request.error);
-
-    });
-
-}
-
-function deleteUpload(key){
-
-    return new Promise((resolve,reject)=>{
-
-        const transaction=
-            db.transaction("uploads","readwrite");
-
-        transaction.objectStore("uploads").delete(key);
-
-        transaction.oncomplete=resolve;
-        transaction.onerror=()=>reject(transaction.error);
-
-    });
-
-}
-
-
-/* ==========================================================
+/* =========================================================
    HELPERS
-========================================================== */
+========================================================= */
 
-function toast(message){
+function esc(s){
 
-    const el=document.getElementById("toast");
-
-    el.textContent=message;
-    el.classList.add("show");
-
-    setTimeout(()=>{
-        el.classList.remove("show");
-    },2500);
-
-}
-
-function openPopup(html){
-
-    document.getElementById("modalContent").innerHTML=html;
-    document.getElementById("popup").classList.add("show");
-
-}
-
-function closePopup(){
-
-    document.getElementById("popup").classList.remove("show");
-
-}
-
-function closePopupOutside(event){
-
-    if(event.target.id==="popup"){
-        closePopup();
-    }
-
-}
-
-function scrollToMovies(){
-
-    document.getElementById("movies").scrollIntoView({
-        behavior:"smooth"
-    });
-
-}
-
-function scrollToIntro(){
-
-    document.getElementById("intro").scrollIntoView({
-        behavior:"smooth"
-    });
-
-}
-
-function escapeHTML(str){
-
-    return String(str??"")
+    return String(s ?? "")
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
@@ -1398,63 +1852,366 @@ function escapeHTML(str){
 }
 
 
-/* ==========================================================
-   MOVIES
-========================================================== */
+function toast(message){
+
+    const e = document.getElementById("toast");
+
+    e.textContent = message;
+
+    e.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+        e.classList.remove("show");
+    },2500);
+
+}
+
+
+function openPopup(html){
+
+    document.getElementById("modalContent").innerHTML = html;
+
+    document.getElementById("popup").classList.add("show");
+
+    document.body.classList.add("modal-open");
+
+}
+
+
+function closePopup(){
+
+    document.getElementById("popup").classList.remove("show");
+
+    document.body.classList.remove("modal-open");
+
+    /*
+       Stop trailer/video playback when closing.
+    */
+    const iframe = document.querySelector(".trailer-player iframe");
+
+    if(iframe){
+        iframe.src = iframe.src;
+    }
+
+}
+
+
+function closePopupOutside(e){
+
+    if(e.target.id === "popup"){
+        closePopup();
+    }
+
+}
+
+
+function scrollToMovies(){
+
+    document.getElementById("movies")
+        .scrollIntoView({behavior:"smooth"});
+
+}
+
+
+function scrollToIntro(){
+
+    document.getElementById("intro")
+        .scrollIntoView({behavior:"smooth"});
+
+}
+
+
+/* =========================================================
+   INDEXED DB
+========================================================= */
+
+function openDB(){
+
+    return new Promise((resolve,reject)=>{
+
+        const request =
+            indexedDB.open("JEMTheatresDB",1);
+
+        request.onupgradeneeded = e => {
+
+            db = e.target.result;
+
+            if(!db.objectStoreNames.contains("uploads")){
+
+                db.createObjectStore("uploads");
+
+            }
+
+        };
+
+        request.onsuccess = e => {
+
+            db = e.target.result;
+
+            resolve();
+
+        };
+
+        request.onerror = () => {
+
+            reject(request.error);
+
+        };
+
+    });
+
+}
+
+
+function putUpload(key,value){
+
+    return new Promise((resolve,reject)=>{
+
+        const transaction =
+            db.transaction("uploads","readwrite");
+
+        transaction
+            .objectStore("uploads")
+            .put(value,key);
+
+        transaction.oncomplete = resolve;
+
+        transaction.onerror = () => {
+            reject(transaction.error);
+        };
+
+    });
+
+}
+
+
+function getUpload(key){
+
+    return new Promise((resolve,reject)=>{
+
+        const transaction =
+            db.transaction("uploads","readonly");
+
+        const request =
+            transaction
+                .objectStore("uploads")
+                .get(key);
+
+        request.onsuccess = () => {
+            resolve(request.result);
+        };
+
+        request.onerror = () => {
+            reject(request.error);
+        };
+
+    });
+
+}
+
+
+function delUpload(key){
+
+    return new Promise((resolve,reject)=>{
+
+        const transaction =
+            db.transaction("uploads","readwrite");
+
+        transaction
+            .objectStore("uploads")
+            .delete(key);
+
+        transaction.oncomplete = resolve;
+
+        transaction.onerror = () => {
+            reject(transaction.error);
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   FALLBACK POSTERS
+========================================================= */
+
+function posterFallback(title){
+
+    return "https://via.placeholder.com/600x900/171717/e11d2e?text="
+        + encodeURIComponent(title);
+
+}
+
+
+/* =========================================================
+   TRAILERS
+   FIXED FOR MOBILE
+========================================================= */
+
+function youtubeId(url){
+
+    try{
+
+        const u = new URL(url);
+
+        if(u.hostname.includes("youtu.be")){
+            return u.pathname.substring(1);
+        }
+
+        if(u.hostname.includes("youtube.com")){
+
+            if(u.searchParams.get("v")){
+                return u.searchParams.get("v");
+            }
+
+            const parts = u.pathname.split("/");
+
+            const index = parts.indexOf("embed");
+
+            if(index >= 0 && parts[index+1]){
+                return parts[index+1];
+            }
+
+            const shorts = parts.indexOf("shorts");
+
+            if(shorts >= 0 && parts[shorts+1]){
+                return parts[shorts+1];
+            }
+
+        }
+
+    }catch{}
+
+    return null;
+
+}
+
+
+function openTrailer(title,url){
+
+    const id = youtubeId(url);
+
+    if(!id){
+
+        window.open(
+            url,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+        return;
+
+    }
+
+    const embed =
+        "https://www.youtube.com/embed/"
+        + encodeURIComponent(id)
+        + "?rel=0&playsinline=1&autoplay=1";
+
+    openPopup(`
+
+        <h2>${esc(title)} — TRAILER</h2>
+
+        <p class="modal-sub">
+            Watch the trailer for ${esc(title)}.
+        </p>
+
+        <div class="trailer-player">
+
+            <iframe
+                src="${esc(embed)}"
+                title="${esc(title)} trailer"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+
+        </div>
+
+        <button
+            class="outline-btn"
+            style="width:100%"
+            onclick="closePopup()">
+
+            CLOSE TRAILER
+
+        </button>
+
+    `);
+
+}
+
+
+/* =========================================================
+   MOVIE RENDER
+========================================================= */
 
 async function renderMovies(){
 
-    const grid=document.getElementById("movieGrid");
+    const grid =
+        document.getElementById("movieGrid");
 
-    if(!grid)return;
+    grid.innerHTML = "";
 
-    grid.innerHTML="";
+    for(const [key,m] of Object.entries(movies)){
 
-    for(const [key,movie] of Object.entries(movies)){
+        let poster = m.poster;
 
-        const savedPoster=
-            await getUpload("poster_"+key).catch(()=>null);
+        try{
 
-        let poster=movie.poster;
+            const uploaded =
+                await getUpload("poster_"+key);
 
-        if(savedPoster){
-            poster=URL.createObjectURL(savedPoster);
-        }
+            if(uploaded){
 
-        grid.innerHTML+=`
+                poster =
+                    URL.createObjectURL(uploaded);
+
+            }
+
+        }catch{}
+
+        grid.innerHTML += `
 
             <div class="movie-card">
 
                 <img
-                    src="${escapeHTML(poster)}"
-                    alt="${escapeHTML(movie.title)}"
-                    onerror="this.src='https://via.placeholder.com/600x900/171717/e11d2e?text=${encodeURIComponent(movie.title)}'"
-                >
+                    src="${esc(poster)}"
+                    alt="${esc(m.title)}"
+                    loading="lazy"
+                    decoding="async"
+                    onerror="
+                        this.onerror=null;
+                        this.src='${posterFallback(m.title)}'
+                    ">
 
                 <div class="movie-card-info">
 
-                    <h3>${escapeHTML(movie.title)}</h3>
+                    <h3>${esc(m.title)}</h3>
 
                     <div class="movie-meta">
-                        ${escapeHTML(movie.rating)}
+                        ${esc(m.rating)}
                         •
-                        ${escapeHTML(movie.genre)}
+                        ${esc(m.genre)}
                     </div>
 
                     <strong>SHOWTIMES</strong>
 
                     <div class="showtimes">
 
-                        ${movie.times.map(time=>`
+                        ${m.times.map(time => `
 
                             <button
                                 class="showtime"
                                 onclick="openTicketPicker(
                                     '${key}',
-                                    '${escapeHTML(time)}'
-                                )"
-                            >
-                                ${escapeHTML(time)}
+                                    '${esc(time)}'
+                                )">
+
+                                ${esc(time)}
+
                             </button>
 
                         `).join("")}
@@ -1463,14 +2220,16 @@ async function renderMovies(){
 
                     <div class="card-actions">
 
-                        <a
-                            href="${escapeHTML(movie.trailer)}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="outline-btn"
-                        >
-                            TRAILER
-                        </a>
+                        <button
+                            class="outline-btn trailer-btn"
+                            onclick="openTrailer(
+                                '${esc(m.title)}',
+                                '${esc(m.trailer)}'
+                            )">
+
+                            ▶ WATCH TRAILER
+
+                        </button>
 
                     </div>
 
@@ -1485,45 +2244,25 @@ async function renderMovies(){
 }
 
 
-/* ==========================================================
-   COMING SOON
-========================================================== */
-
-function saveComingSoon(){
-
-    localStorage.setItem(
-        "jemComingSoon",
-        JSON.stringify(comingSoon)
-    );
-
-    renderComingSoon();
-    createAdminComingMovies();
-
-}
-
 function renderComingSoon(){
 
-    const grid=document.getElementById("comingSoonGrid");
+    const grid =
+        document.getElementById("comingSoonGrid");
 
-    if(!grid)return;
+    grid.innerHTML = "";
 
-    grid.innerHTML="";
+    if(!comingSoon.length){
 
-    if(comingSoon.length===0){
-
-        grid.innerHTML=`
-            <p class="muted">
-                No upcoming movies have been added yet.
-            </p>
-        `;
+        grid.innerHTML =
+            '<p class="muted">No upcoming movies have been added yet.</p>';
 
         return;
 
     }
 
-    comingSoon.forEach(movie=>{
+    comingSoon.forEach(movie => {
 
-        grid.innerHTML+=`
+        grid.innerHTML += `
 
             <div class="movie-card coming-card">
 
@@ -1532,29 +2271,33 @@ function renderComingSoon(){
                 </div>
 
                 <img
-                    src="${escapeHTML(movie.poster)}"
-                    alt="${escapeHTML(movie.title)}"
-                    onerror="this.src='https://via.placeholder.com/600x900/171717/e11d2e?text=${encodeURIComponent(movie.title)}'"
-                >
+                    src="${esc(movie.poster)}"
+                    alt="${esc(movie.title)}"
+                    loading="lazy"
+                    decoding="async"
+                    onerror="
+                        this.onerror=null;
+                        this.src='${posterFallback(movie.title)}'
+                    ">
 
                 <div class="movie-card-info">
 
-                    <h3>
-                        ${escapeHTML(movie.title)}
-                    </h3>
+                    <h3>${esc(movie.title)}</h3>
 
                     <div class="movie-meta">
-                        ${escapeHTML(movie.date)}
+                        ${esc(movie.date)}
                     </div>
 
-                    <a
-                        href="${escapeHTML(movie.trailer)}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="outline-btn"
-                    >
-                        WATCH TRAILER
-                    </a>
+                    <button
+                        class="outline-btn trailer-btn"
+                        onclick="openTrailer(
+                            '${esc(movie.title)}',
+                            '${esc(movie.trailer)}'
+                        )">
+
+                        ▶ WATCH TRAILER
+
+                    </button>
 
                 </div>
 
@@ -1567,143 +2310,200 @@ function renderComingSoon(){
 }
 
 
-/* ==========================================================
-   TICKETS / SEATS
-========================================================== */
-
-let selectedSeats=[];
-let activeSeatInfo=null;
-
-function openTicketPicker(movieKey,time){
-
-    buildSeatPicker(movieKey,time,false);
-
-}
+/* =========================================================
+   SEATS
+========================================================= */
 
 function getSeatKey(movieKey,time,premium){
 
-    const location=
+    const location =
         document.getElementById("locationSelect").value;
 
-    return `jemSeats_${location}_${movieKey}_${time}_${premium?"premium":"standard"}`;
+    return `
+        jemSeats_
+        ${location}_
+        ${movieKey}_
+        ${time}_
+        ${premium ? "premium" : "standard"}
+    `.replace(/\s/g,"");
 
 }
 
-function getSeatInventory(movieKey,time,premium){
 
-    const key=getSeatKey(movieKey,time,premium);
+function getSeats(movieKey,time,premium){
 
-    let saved=JSON.parse(localStorage.getItem(key));
+    const key =
+        getSeatKey(movieKey,time,premium);
 
-    if(saved)return saved;
+    let seats =
+        JSON.parse(localStorage.getItem(key) || "null");
 
-    const taken=[];
+    if(seats){
+        return seats;
+    }
 
-    const number=
+    seats = [];
+
+    const min =
+        Math.max(
+            0,
+            Number(JEM_SETTINGS.minTakenSeats) || 10
+        );
+
+    const max =
+        Math.max(
+            min,
+            Number(JEM_SETTINGS.maxTakenSeats) || 20
+        );
+
+    const amount =
         Math.floor(
-            Math.random()*
-            (
-                JEM_SETTINGS.maxTakenSeats-
-                JEM_SETTINGS.minTakenSeats+1
+            Math.random() * (max-min+1)
+        ) + min;
+
+    while(seats.length < amount){
+
+        const seat =
+            String.fromCharCode(
+                65 + Math.floor(Math.random()*9)
             )
-        )+
-        JEM_SETTINGS.minTakenSeats;
+            +
+            (Math.floor(Math.random()*7)+1);
 
-    while(taken.length<number){
-
-        const row=Math.floor(Math.random()*9);
-        const col=Math.floor(Math.random()*7);
-
-        const seat=
-            `${String.fromCharCode(65+row)}${col+1}`;
-
-        if(!taken.includes(seat)){
-            taken.push(seat);
+        if(!seats.includes(seat)){
+            seats.push(seat);
         }
 
     }
 
-    localStorage.setItem(key,JSON.stringify(taken));
+    localStorage.setItem(
+        key,
+        JSON.stringify(seats)
+    );
 
-    return taken;
+    return seats;
 
 }
 
-function buildSeatPicker(movieKey,time,premium){
 
-    selectedSeats=[];
+function openTicketPicker(movieKey,time){
 
-    activeSeatInfo={
+    buildSeatPicker(
         movieKey,
         time,
-        premium
+        false
+    );
+
+}
+
+
+/*
+    FIX:
+    Premium now uses a special seat mode and
+    no longer tries to access movies["premium"].
+*/
+
+function buildSeatPicker(movieKey,time,premium){
+
+    selectedSeats = [];
+
+    activeSeatInfo = {
+        movieKey:movieKey,
+        time:time,
+        premium:premium
     };
 
-    const taken=getSeatInventory(movieKey,time,premium);
+    const taken =
+        getSeats(
+            movieKey,
+            time,
+            premium
+        );
 
-    const title=
+    let title;
+
+    if(premium){
+
+        title = "JEM PREMIUM SEATING";
+
+    }else{
+
+        title =
+            movies[movieKey]
+                ? movies[movieKey].title
+                : "JEM THEATRES";
+
+    }
+
+    const price =
         premium
-        ?"JEM PREMIUM SEATING"
-        :movies[movieKey].title;
+            ? JEM_SETTINGS.premiumTicketPrice
+            : JEM_SETTINGS.ticketPrice;
 
-    const price=
-        premium
-        ?JEM_SETTINGS.premiumTicketPrice
-        :JEM_SETTINGS.ticketPrice;
+    let html = `
 
-    let html=`
-
-        <h2>${escapeHTML(title)}</h2>
+        <h2>${esc(title)}</h2>
 
         <p class="modal-sub">
+
             ${
                 premium
-                ?"Choose your exclusive JEM Premium seats."
-                :`Choose your seats for ${escapeHTML(time)}.`
+                    ? "Choose your exclusive JEM Premium seats."
+                    : "Choose your seats for "+esc(time)+"."
             }
+
         </p>
 
-        <div style="
-            text-align:center;
-            color:#777;
-            margin-bottom:10px;
-        ">
+        <div
+            style="
+                text-align:center;
+                color:#777;
+                margin-bottom:10px
+            ">
+
             SCREEN
+
         </div>
 
-        <div style="
-            height:7px;
-            background:var(--red);
-            border-radius:50%;
-            margin:0 auto 20px;
-            max-width:420px;
-            box-shadow:0 0 20px rgba(225,29,46,.3);
-        "></div>
+        <div
+            style="
+                height:7px;
+                background:var(--red);
+                border-radius:50%;
+                margin:0 auto 20px;
+                max-width:420px
+            ">
+        </div>
 
         <div class="seat-map">
     `;
 
     for(let row=0;row<9;row++){
 
-        for(let col=0;col<7;col++){
+        for(let column=0;column<7;column++){
 
-            const seat=
-                `${String.fromCharCode(65+row)}${col+1}`;
+            const seat =
+                String.fromCharCode(65+row)
+                +
+                (column+1);
 
-            const isTaken=taken.includes(seat);
+            const isTaken =
+                taken.includes(seat);
 
-            html+=`
+            html += `
 
                 <button
-                    class="seat
-                        ${isTaken?"taken":""}
-                        ${premium?"premium-seat":""}
+                    class="
+                        seat
+                        ${isTaken ? "taken" : ""}
+                        ${premium ? "premium-seat" : ""}
                     "
-                    ${isTaken?"disabled":""}
+                    ${isTaken ? "disabled" : ""}
                     onclick="selectSeat('${seat}')"
-                    id="seat-${seat}"
-                >
+                    id="seat-${seat}">
+
                     ${seat}
+
                 </button>
 
             `;
@@ -1712,7 +2512,7 @@ function buildSeatPicker(movieKey,time,premium){
 
     }
 
-    html+=`
+    html += `
 
         </div>
 
@@ -1733,95 +2533,98 @@ function buildSeatPicker(movieKey,time,premium){
                 Selected
             </div>
 
-            ${
-                premium
-                ?`
-                <div class="legend-item">
-                    <span class="legend-box premium"></span>
-                    Premium
-                </div>
-                `
-                :""
-            }
-
         </div>
 
-        <div style="
-            margin-top:25px;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:15px;
-            flex-wrap:wrap;
-        ">
+        <div
+            style="
+                margin-top:25px;
+                display:flex;
+                justify-content:space-between;
+                gap:15px;
+                flex-wrap:wrap
+            ">
 
             <div>
                 <strong>Selected:</strong>
-                <span id="selectedSeatText">None</span>
+                <span id="selectedSeatText">
+                    None
+                </span>
             </div>
 
-            <div>
-                <strong>$${price.toFixed(2)} each</strong>
-            </div>
+            <strong>
+                $${Number(price).toFixed(2)} each
+            </strong>
 
         </div>
 
         <button
             class="gold-btn"
             style="width:100%;margin-top:20px"
-            onclick="continueSeatCheckout()"
-        >
+            onclick="continueSeatCheckout()">
+
             ${
                 premium
-                ?"CONTINUE TO PREMIUM SNACKS"
-                :"CONTINUE"
+                    ? "CONTINUE TO PREMIUM SNACKS"
+                    : "CONTINUE"
             }
+
         </button>
+
     `;
 
     openPopup(html);
 
 }
 
+
 function selectSeat(seat){
 
-    const button=document.getElementById("seat-"+seat);
+    const button =
+        document.getElementById("seat-"+seat);
 
-    if(!button||button.disabled)return;
+    if(!button || button.disabled){
+        return;
+    }
 
     if(selectedSeats.includes(seat)){
 
-        selectedSeats=
-            selectedSeats.filter(s=>s!==seat);
+        selectedSeats =
+            selectedSeats.filter(
+                s => s !== seat
+            );
 
         button.classList.remove("selected");
 
     }else{
 
         selectedSeats.push(seat);
+
         button.classList.add("selected");
 
     }
 
-    const text=
-        document.getElementById("selectedSeatText");
+    const text =
+        document.getElementById(
+            "selectedSeatText"
+        );
 
     if(text){
 
-        text.textContent=
-            selectedSeats.length
-            ?selectedSeats.join(", ")
-            :"None";
+        text.textContent =
+            selectedSeats.join(", ")
+            || "None";
 
     }
 
 }
 
+
 function continueSeatCheckout(){
 
-    if(selectedSeats.length===0){
+    if(!selectedSeats.length){
 
         toast("CHOOSE AT LEAST ONE SEAT");
+
         return;
 
     }
@@ -1830,67 +2633,100 @@ function continueSeatCheckout(){
 
         openPremiumSnacks();
 
-    }else{
-
-        const price=
-            JEM_SETTINGS.ticketPrice*
-            selectedSeats.length;
-
-        openPopup(`
-
-            <h2>CONFIRM TICKETS</h2>
-
-            <p class="modal-sub">
-                ${escapeHTML(
-                    movies[activeSeatInfo.movieKey].title
-                )}
-                •
-                ${escapeHTML(activeSeatInfo.time)}
-            </p>
-
-            <p>
-                Seats:
-                <strong>
-                    ${selectedSeats.join(", ")}
-                </strong>
-            </p>
-
-            <p style="margin-top:10px">
-                Tickets:
-                <strong>
-                    ${selectedSeats.length}
-                </strong>
-            </p>
-
-            <div class="checkout-total">
-                Total: $${price.toFixed(2)}
-            </div>
-
-            <button
-                class="gold-btn"
-                style="width:100%"
-                onclick="completeTicketPurchase()"
-            >
-                CONFIRM ORDER
-            </button>
-
-        `);
+        return;
 
     }
 
+    const movie =
+        movies[activeSeatInfo.movieKey];
+
+    const total =
+        JEM_SETTINGS.ticketPrice
+        *
+        selectedSeats.length;
+
+    openPopup(`
+
+        <h2>CONFIRM TICKETS</h2>
+
+        <p class="modal-sub">
+            ${esc(movie.title)}
+            •
+            ${esc(activeSeatInfo.time)}
+        </p>
+
+        <p>
+            Seats:
+            <strong>
+                ${selectedSeats.join(", ")}
+            </strong>
+        </p>
+
+        <div class="checkout-total">
+            Total: $${total.toFixed(2)}
+        </div>
+
+        <button
+            class="gold-btn"
+            style="width:100%"
+            onclick="completeTicketOrder()">
+
+            CONFIRM ORDER
+
+        </button>
+
+    `);
+
 }
 
-function completeTicketPurchase(){
+
+function completeTicketOrder(){
+
+    if(!activeSeatInfo){
+        return;
+    }
+
+    const key =
+        getSeatKey(
+            activeSeatInfo.movieKey,
+            activeSeatInfo.time,
+            activeSeatInfo.premium
+        );
+
+    const taken =
+        getSeats(
+            activeSeatInfo.movieKey,
+            activeSeatInfo.time,
+            activeSeatInfo.premium
+        );
+
+    selectedSeats.forEach(seat => {
+
+        if(!taken.includes(seat)){
+            taken.push(seat);
+        }
+
+    });
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(taken)
+    );
 
     toast("TICKETS ORDERED!");
+
+    selectedSeats = [];
+
+    activeSeatInfo = null;
+
     closePopup();
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    PREMIUM
-========================================================== */
+========================================================= */
 
 function openPremium(){
 
@@ -1904,8 +2740,9 @@ function openPremium(){
             The ultimate JEM movie experience.
         </p>
 
-        <div class="premium-list"
-             style="justify-content:flex-start">
+        <div
+            class="premium-list"
+            style="justify-content:flex-start">
 
             <span>★ Premium seating</span>
             <span>★ Premium snacks</span>
@@ -1915,49 +2752,44 @@ function openPremium(){
         </div>
 
         <p style="margin:20px 0">
+
             Premium ticket:
             <strong>
                 $${JEM_SETTINGS.premiumTicketPrice.toFixed(2)}
             </strong>
+
         </p>
 
         <button
             class="gold-btn"
             style="width:100%"
-            onclick="choosePremiumSeats()"
-        >
+            onclick="buildSeatPicker(
+                'premium-experience',
+                'Premium Experience',
+                true
+            )">
+
             CHOOSE PREMIUM SEATS
+
         </button>
 
     `);
 
 }
 
-function choosePremiumSeats(){
-
-    buildSeatPicker(
-        "premium",
-        "Premium Experience",
-        true
-    );
-
-}
-
-
-/* ==========================================================
-   PREMIUM SNACKS
-========================================================== */
 
 function openPremiumSnacks(){
 
-    premiumFoodCart=[];
+    premiumFoodCart = [];
+
     renderPremiumSnacks();
 
 }
 
+
 function renderPremiumSnacks(){
 
-    let html=`
+    let html = `
 
         <h2 style="color:var(--red)">
             PREMIUM SNACKS
@@ -1970,9 +2802,9 @@ function renderPremiumSnacks(){
 
     `;
 
-    premiumFood.forEach(item=>{
+    premiumFood.forEach(item => {
 
-        html+=`
+        html += `
 
             <div class="premium-food-card">
 
@@ -1981,11 +2813,11 @@ function renderPremiumSnacks(){
                 </div>
 
                 <div class="premium-food-name">
-                    ${escapeHTML(item.name)}
+                    ${esc(item.name)}
                 </div>
 
                 <div class="premium-food-description">
-                    ${escapeHTML(item.description)}
+                    ${esc(item.description)}
                 </div>
 
                 <div class="premium-food-price">
@@ -1994,9 +2826,10 @@ function renderPremiumSnacks(){
 
                 <button
                     class="gold-btn"
-                    onclick="addPremiumFood('${item.id}')"
-                >
+                    onclick="addPremiumFood('${item.id}')">
+
                     ADD TO PREMIUM ORDER
+
                 </button>
 
             </div>
@@ -2005,16 +2838,17 @@ function renderPremiumSnacks(){
 
     });
 
-    html+=`
+    html += `
 
         <div id="premiumCart"></div>
 
         <button
             class="gold-btn"
             style="width:100%;margin-top:20px"
-            onclick="premiumCheckout()"
-        >
+            onclick="premiumCheckout()">
+
             CHECKOUT PREMIUM EXPERIENCE
+
         </button>
 
     `;
@@ -2025,41 +2859,66 @@ function renderPremiumSnacks(){
 
 }
 
+
 function addPremiumFood(id){
 
-    const item=
-        premiumFood.find(x=>x.id===id);
+    const item =
+        premiumFood.find(
+            x => x.id === id
+        );
 
-    if(!item)return;
+    if(!item){
+        return;
+    }
 
-    const existing=
-        premiumFoodCart.find(x=>x.id===id);
+    const existing =
+        premiumFoodCart.find(
+            x => x.id === id
+        );
 
     if(existing){
+
         existing.qty++;
+
     }else{
-        premiumFoodCart.push({...item,qty:1});
+
+        premiumFoodCart.push({
+            ...item,
+            qty:1
+        });
+
     }
 
     updatePremiumCart();
 
-    toast(item.name+" ADDED");
+    toast(
+        item.name.toUpperCase()
+        +
+        " ADDED"
+    );
 
 }
+
 
 function changePremiumQty(id,amount){
 
-    const item=
-        premiumFoodCart.find(x=>x.id===id);
+    const item =
+        premiumFoodCart.find(
+            x => x.id === id
+        );
 
-    if(!item)return;
+    if(!item){
+        return;
+    }
 
-    item.qty+=amount;
+    item.qty += amount;
 
-    if(item.qty<=0){
+    if(item.qty <= 0){
 
-        premiumFoodCart=
-            premiumFoodCart.filter(x=>x.id!==id);
+        premiumFoodCart =
+            premiumFoodCart.filter(
+                x => x.id !== id
+            );
 
     }
 
@@ -2067,58 +2926,69 @@ function changePremiumQty(id,amount){
 
 }
 
+
 function updatePremiumCart(){
 
-    const container=
+    const cart =
         document.getElementById("premiumCart");
 
-    if(!container)return;
+    if(!cart){
+        return;
+    }
 
-    let total=0;
+    let total = 0;
 
-    let html=`
-        <h3 style="margin-top:30px;color:var(--red)">
+    let html = `
+        <h3
+            style="
+                margin-top:30px;
+                color:var(--red)
+            ">
+
             YOUR PREMIUM SNACKS
+
         </h3>
     `;
 
-    if(premiumFoodCart.length===0){
+    premiumFoodCart.forEach(item => {
 
-        html+=`
-            <p class="muted" style="margin-top:10px">
-                No premium snacks selected.
-            </p>
-        `;
+        total +=
+            item.price * item.qty;
 
-    }
-
-    premiumFoodCart.forEach(item=>{
-
-        total+=item.price*item.qty;
-
-        html+=`
+        html += `
 
             <div class="cart-row">
 
                 <div>
-                    ${escapeHTML(item.name)}
-                    × ${item.qty}
+                    ${esc(item.name)}
+                    ×
+                    ${item.qty}
                 </div>
 
                 <div class="qty">
 
                     <button
-                        onclick="changePremiumQty('${item.id}',-1)"
-                    >
+                        onclick="changePremiumQty(
+                            '${item.id}',
+                            -1
+                        )">
+
                         −
+
                     </button>
 
-                    <span>${item.qty}</span>
+                    <span>
+                        ${item.qty}
+                    </span>
 
                     <button
-                        onclick="changePremiumQty('${item.id}',1)"
-                    >
+                        onclick="changePremiumQty(
+                            '${item.id}',
+                            1
+                        )">
+
                         +
+
                     </button>
 
                 </div>
@@ -2129,60 +2999,102 @@ function updatePremiumCart(){
 
     });
 
-    html+=`
+    html += `
 
         <div class="checkout-total">
             Snacks: $${total.toFixed(2)}
         </div>
+
     `;
 
-    container.innerHTML=html;
+    cart.innerHTML = html;
 
 }
 
+
 function premiumCheckout(){
 
-    if(selectedSeats.length===0){
+    if(!selectedSeats.length){
 
         toast("CHOOSE PREMIUM SEATS FIRST");
+
         return;
 
     }
 
-    const ticketTotal=
-        JEM_SETTINGS.premiumTicketPrice*
-        selectedSeats.length;
-
-    const snackTotal=
+    const snacksTotal =
         premiumFoodCart.reduce(
-            (sum,item)=>sum+item.price*item.qty,
+            (sum,item) =>
+                sum + item.price * item.qty,
             0
         );
 
-    const total=ticketTotal+snackTotal;
+    const ticketTotal =
+        JEM_SETTINGS.premiumTicketPrice
+        *
+        selectedSeats.length;
 
-    toast(`PREMIUM ORDER: $${total.toFixed(2)}`);
+    const total =
+        ticketTotal + snacksTotal;
+
+    const key =
+        getSeatKey(
+            activeSeatInfo.movieKey,
+            activeSeatInfo.time,
+            true
+        );
+
+    const taken =
+        getSeats(
+            activeSeatInfo.movieKey,
+            activeSeatInfo.time,
+            true
+        );
+
+    selectedSeats.forEach(seat => {
+
+        if(!taken.includes(seat)){
+            taken.push(seat);
+        }
+
+    });
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(taken)
+    );
+
+    toast(
+        "PREMIUM ORDER: $"
+        +
+        total.toFixed(2)
+    );
+
+    selectedSeats = [];
+
+    activeSeatInfo = null;
+
+    premiumFoodCart = [];
 
     closePopup();
 
 }
 
 
-/* ==========================================================
-   FOOD
-========================================================== */
+/* =========================================================
+   REGULAR FOOD
+========================================================= */
 
 function renderFood(){
 
-    const grid=document.getElementById("foodGrid");
+    const grid =
+        document.getElementById("foodGrid");
 
-    if(!grid)return;
+    grid.innerHTML = "";
 
-    grid.innerHTML="";
+    regularFood.forEach(item => {
 
-    regularFood.forEach(item=>{
-
-        grid.innerHTML+=`
+        grid.innerHTML += `
 
             <div class="food-card">
 
@@ -2191,7 +3103,7 @@ function renderFood(){
                 </div>
 
                 <h3>
-                    ${escapeHTML(item.name)}
+                    ${esc(item.name)}
                 </h3>
 
                 <div class="food-price">
@@ -2200,9 +3112,10 @@ function renderFood(){
 
                 <button
                     class="gold-btn"
-                    onclick="addFood('${item.id}')"
-                >
+                    onclick="addFood('${item.id}')">
+
                     ADD
+
                 </button>
 
             </div>
@@ -2213,37 +3126,52 @@ function renderFood(){
 
 }
 
+
 function addFood(id){
 
-    const item=
-        regularFood.find(x=>x.id===id);
+    const item =
+        regularFood.find(
+            x => x.id === id
+        );
 
-    if(!item)return;
-
-    const existing=
-        foodCart.find(x=>x.id===id);
-
-    if(existing){
-        existing.qty++;
-    }else{
-        foodCart.push({...item,qty:1});
+    if(!item){
+        return;
     }
 
-    toast(item.name+" ADDED");
+    const existing =
+        foodCart.find(
+            x => x.id === id
+        );
+
+    if(existing){
+
+        existing.qty++;
+
+    }else{
+
+        foodCart.push({
+            ...item,
+            qty:1
+        });
+
+    }
+
+    toast(
+        item.name.toUpperCase()
+        +
+        " ADDED"
+    );
 
 }
+
 
 function openFoodOrder(){
 
-    renderFoodOrder();
+    let html = `
 
-}
-
-function renderFoodOrder(){
-
-    let html=`
-
-        <h2>ORDER FOOD & DRINKS</h2>
+        <h2>
+            ORDER FOOD & DRINKS
+        </h2>
 
         <p class="modal-sub">
             Order your concessions online.
@@ -2251,31 +3179,34 @@ function renderFoodOrder(){
 
     `;
 
-    regularFood.forEach(item=>{
+    regularFood.forEach(item => {
 
-        html+=`
+        html += `
 
             <div class="cart-row">
 
                 <div>
+
                     <strong>
                         ${item.icon}
-                        ${escapeHTML(item.name)}
+                        ${esc(item.name)}
                     </strong>
 
                     <div class="muted">
                         $${item.price.toFixed(2)}
                     </div>
+
                 </div>
 
                 <button
                     class="gold-btn"
                     onclick="
                         addFood('${item.id}');
-                        renderFoodOrder();
-                    "
-                >
+                        updateRegularCart();
+                    ">
+
                     ADD
+
                 </button>
 
             </div>
@@ -2284,77 +3215,88 @@ function renderFoodOrder(){
 
     });
 
-    html+=`
+    html += `
 
         <div id="regularCart"></div>
 
         <button
             class="gold-btn"
             style="width:100%;margin-top:20px"
-            onclick="foodCheckout()"
-        >
+            onclick="foodCheckout()">
+
             CHECKOUT
+
         </button>
 
     `;
 
     openPopup(html);
+
     updateRegularCart();
 
 }
 
+
 function updateRegularCart(){
 
-    const container=
+    const cart =
         document.getElementById("regularCart");
 
-    if(!container)return;
+    if(!cart){
+        return;
+    }
 
-    let total=0;
+    let total = 0;
 
-    let html=`
+    let html = `
         <h3 style="margin-top:25px">
             YOUR ORDER
         </h3>
     `;
 
-    if(foodCart.length===0){
+    foodCart.forEach(item => {
 
-        html+=`
-            <p class="muted" style="margin-top:10px">
-                Your cart is empty.
-            </p>
-        `;
+        total +=
+            item.price * item.qty;
 
-    }
-
-    foodCart.forEach(item=>{
-
-        total+=item.price*item.qty;
-
-        html+=`
+        html += `
 
             <div class="cart-row">
 
                 <div>
-                    ${escapeHTML(item.name)}
-                    × ${item.qty}
+                    ${esc(item.name)}
+                    ×
+                    ${item.qty}
                 </div>
 
                 <div class="qty">
 
                     <button
-                        onclick="changeFoodQty('${item.id}',-1)"
-                    >
+                        onclick="
+                            changeFoodQty(
+                                '${item.id}',
+                                -1
+                            )
+                        ">
+
                         −
+
                     </button>
 
-                    <span>${item.qty}</span>
+                    <span>
+                        ${item.qty}
+                    </span>
 
                     <button
-                        onclick="changeFoodQty('${item.id}',1)"
-                    >
+                        onclick="
+                            changeFoodQty(
+                                '${item.id}',
+                                1
+                            )
+                        ">
+
                         +
+
                     </button>
 
                 </div>
@@ -2365,29 +3307,38 @@ function updateRegularCart(){
 
     });
 
-    html+=`
+    html += `
+
         <div class="checkout-total">
             Total: $${total.toFixed(2)}
         </div>
+
     `;
 
-    container.innerHTML=html;
+    cart.innerHTML = html;
 
 }
 
+
 function changeFoodQty(id,amount){
 
-    const item=
-        foodCart.find(x=>x.id===id);
+    const item =
+        foodCart.find(
+            x => x.id === id
+        );
 
-    if(!item)return;
+    if(!item){
+        return;
+    }
 
-    item.qty+=amount;
+    item.qty += amount;
 
-    if(item.qty<=0){
+    if(item.qty <= 0){
 
-        foodCart=
-            foodCart.filter(x=>x.id!==id);
+        foodCart =
+            foodCart.filter(
+                x => x.id !== id
+            );
 
     }
 
@@ -2395,37 +3346,44 @@ function changeFoodQty(id,amount){
 
 }
 
+
 function foodCheckout(){
 
-    if(foodCart.length===0){
+    if(!foodCart.length){
 
         toast("YOUR CART IS EMPTY");
+
         return;
 
     }
 
-    toast("FOOD ORDER PLACED!");
+    foodCart = [];
 
-    foodCart=[];
+    toast("FOOD ORDER PLACED!");
 
     closePopup();
 
 }
 
 
-/* ==========================================================
-   ACCOUNT / PROFILE PICTURE
-========================================================== */
+/* =========================================================
+   ACCOUNT
+========================================================= */
 
 function openAccount(){
 
     if(currentUser){
+
         showAccount();
+
     }else{
+
         showLogin();
+
     }
 
 }
+
 
 function showLogin(){
 
@@ -2438,54 +3396,75 @@ function showLogin(){
         </p>
 
         <div class="form-group">
+
             <label>Name</label>
-            <input id="loginName" placeholder="Your name">
+
+            <input
+                id="loginName"
+                placeholder="Your name">
+
         </div>
 
         <div class="form-group">
+
             <label>Email</label>
+
             <input
                 id="loginEmail"
                 type="email"
-                placeholder="you@example.com"
-            >
+                placeholder="you@example.com">
+
         </div>
 
         <button
             class="gold-btn"
             style="width:100%"
-            onclick="signIn()"
-        >
+            onclick="signIn()">
+
             SIGN IN / CREATE ACCOUNT
+
         </button>
 
     `);
 
 }
 
+
 function signIn(){
 
-    const name=
-        document.getElementById("loginName").value.trim();
+    const name =
+        document.getElementById(
+            "loginName"
+        ).value.trim();
 
-    const email=
-        document.getElementById("loginEmail").value.trim();
+    const email =
+        document.getElementById(
+            "loginEmail"
+        ).value.trim();
 
-    if(!name||!email){
+    if(!name || !email){
 
-        toast("ENTER YOUR NAME AND EMAIL");
+        toast(
+            "ENTER YOUR NAME AND EMAIL"
+        );
+
         return;
 
     }
 
-    currentUser={
-        name,
-        email,
+    currentUser = {
+
+        name:name,
+
+        email:email,
+
         pfp:
-            currentUser&&
-            currentUser.email===email
-            ?currentUser.pfp
-            :null
+            currentUser
+            &&
+            currentUser.email === email
+                ? currentUser.pfp
+                : null
+
     };
 
     localStorage.setItem(
@@ -2494,21 +3473,26 @@ function signIn(){
     );
 
     updateAccountUI();
+
     showAccount();
 
     toast(
-        "WELCOME TO JEM, "+
-        name.toUpperCase()+
+        "WELCOME TO JEM, "
+        +
+        name.toUpperCase()
+        +
         "!"
     );
 
 }
 
+
 function showAccount(){
 
-    const pfp=
-        currentUser.pfp||
-        "https://via.placeholder.com/200/222222/ffffff?text=JEM";
+    const profilePicture =
+        currentUser.pfp
+        ||
+        posterFallback("JEM");
 
     openPopup(`
 
@@ -2517,63 +3501,76 @@ function showAccount(){
             <img
                 id="accountPfp"
                 class="pfp"
-                src="${escapeHTML(pfp)}"
-            >
+                src="${esc(profilePicture)}">
 
             <div>
-                <h2>${escapeHTML(currentUser.name)}</h2>
+
+                <h2>
+                    ${esc(currentUser.name)}
+                </h2>
 
                 <p class="muted">
-                    ${escapeHTML(currentUser.email)}
+                    ${esc(currentUser.email)}
                 </p>
+
             </div>
 
         </div>
 
-        <h3>PROFILE PICTURE</h3>
+        <h3>
+            PROFILE PICTURE
+        </h3>
 
-        <p class="muted" style="margin-top:5px">
-            Anyone with an account can change their profile
-            picture. Admin access is NOT required.
+        <p
+            class="muted"
+            style="margin-top:5px">
+
+            Anyone with an account can change
+            their profile picture.
+
         </p>
 
-        <div id="pfpDrop" class="pfp-drop">
+        <div
+            id="pfpDrop"
+            class="pfp-drop">
 
             <strong>
                 DROP YOUR PROFILE PICTURE HERE
             </strong>
 
             <span>
-                or click here to choose an image
+                or tap here to choose an image
             </span>
 
             <input
                 id="pfpFile"
                 type="file"
-                accept="image/*"
-            >
+                accept="image/*">
 
         </div>
 
         <button
             class="outline-btn"
-            onclick="removePfp()"
-        >
+            onclick="removePfp()">
+
             REMOVE PROFILE PICTURE
+
         </button>
 
-        <hr style="
-            border:0;
-            border-top:1px solid #292929;
-            margin:25px 0;
-        ">
+        <hr
+            style="
+                border:0;
+                border-top:1px solid #292929;
+                margin:25px 0
+            ">
 
         <button
             class="danger-btn"
             style="width:100%"
-            onclick="logout()"
-        >
+            onclick="logout()">
+
             SIGN OUT
+
         </button>
 
     `);
@@ -2582,70 +3579,96 @@ function showAccount(){
 
 }
 
+
 function setupPfpDropZone(){
 
-    const zone=document.getElementById("pfpDrop");
-    const input=document.getElementById("pfpFile");
+    const zone =
+        document.getElementById("pfpDrop");
 
-    if(!zone||!input)return;
+    const input =
+        document.getElementById("pfpFile");
 
-    zone.onclick=()=>{
+    if(!zone || !input){
+        return;
+    }
+
+    zone.onclick = () => {
         input.click();
     };
 
-    zone.ondragover=event=>{
+    zone.ondragover = event => {
 
         event.preventDefault();
+
         zone.classList.add("dragging");
 
     };
 
-    zone.ondragleave=()=>{
+    zone.ondragleave = () => {
+
         zone.classList.remove("dragging");
+
     };
 
-    zone.ondrop=event=>{
+    zone.ondrop = event => {
 
         event.preventDefault();
+
         zone.classList.remove("dragging");
 
-        const file=event.dataTransfer.files[0];
+        const file =
+            event.dataTransfer.files[0];
 
-        if(file)handlePfpFile(file);
+        if(file){
+
+            handlePfpFile(file);
+
+        }
 
     };
 
-    input.onchange=()=>{
+    input.onchange = () => {
 
-        const file=input.files[0];
+        if(input.files[0]){
 
-        if(file)handlePfpFile(file);
+            handlePfpFile(
+                input.files[0]
+            );
+
+        }
 
     };
 
 }
+
 
 function handlePfpFile(file){
 
     if(!file.type.startsWith("image/")){
 
         toast("PLEASE USE AN IMAGE FILE");
+
         return;
 
     }
 
-    if(file.size>8*1024*1024){
+    if(file.size > 8 * 1024 * 1024){
 
-        toast("IMAGE MUST BE UNDER 8MB");
+        toast(
+            "IMAGE MUST BE UNDER 8MB"
+        );
+
         return;
 
     }
 
-    const reader=new FileReader();
+    const reader =
+        new FileReader();
 
-    reader.onload=()=>{
+    reader.onload = () => {
 
-        currentUser.pfp=reader.result;
+        currentUser.pfp =
+            reader.result;
 
         localStorage.setItem(
             "jemCurrentUser",
@@ -2654,11 +3677,21 @@ function handlePfpFile(file){
 
         updateAccountUI();
 
-        const img=document.getElementById("accountPfp");
+        const preview =
+            document.getElementById(
+                "accountPfp"
+            );
 
-        if(img)img.src=currentUser.pfp;
+        if(preview){
 
-        toast("PROFILE PICTURE UPDATED!");
+            preview.src =
+                reader.result;
+
+        }
+
+        toast(
+            "PROFILE PICTURE UPDATED!"
+        );
 
     };
 
@@ -2666,9 +3699,10 @@ function handlePfpFile(file){
 
 }
 
+
 function removePfp(){
 
-    currentUser.pfp=null;
+    currentUser.pfp = null;
 
     localStorage.setItem(
         "jemCurrentUser",
@@ -2676,54 +3710,70 @@ function removePfp(){
     );
 
     updateAccountUI();
+
     showAccount();
 
-    toast("PROFILE PICTURE REMOVED");
+    toast(
+        "PROFILE PICTURE REMOVED"
+    );
 
 }
 
+
 function updateAccountUI(){
 
-    const button=
-        document.getElementById("accountButtonText");
+    const button =
+        document.getElementById(
+            "accountButtonText"
+        );
 
-    const navPfp=
-        document.getElementById("navPfp");
-
-    if(!button||!navPfp)return;
+    const picture =
+        document.getElementById(
+            "navPfp"
+        );
 
     if(currentUser){
 
-        button.textContent=
+        button.textContent =
             currentUser.name
-            .split(" ")[0]
-            .toUpperCase();
+                .split(" ")[0]
+                .toUpperCase();
 
         if(currentUser.pfp){
 
-            navPfp.src=currentUser.pfp;
-            navPfp.style.display="inline-block";
+            picture.src =
+                currentUser.pfp;
+
+            picture.style.display =
+                "inline-block";
 
         }else{
 
-            navPfp.style.display="none";
+            picture.style.display =
+                "none";
 
         }
 
     }else{
 
-        button.textContent="ACCOUNT";
-        navPfp.style.display="none";
+        button.textContent =
+            "ACCOUNT";
+
+        picture.style.display =
+            "none";
 
     }
 
 }
 
+
 function logout(){
 
-    currentUser=null;
+    currentUser = null;
 
-    localStorage.removeItem("jemCurrentUser");
+    localStorage.removeItem(
+        "jemCurrentUser"
+    );
 
     updateAccountUI();
 
@@ -2734,15 +3784,17 @@ function logout(){
 }
 
 
-/* ==========================================================
+/* =========================================================
    ADMIN LOGIN
-========================================================== */
+========================================================= */
 
 function openAdminLogin(){
 
     openPopup(`
 
-        <h2>JEM ADMIN</h2>
+        <h2>
+            JEM ADMIN
+        </h2>
 
         <p class="modal-sub">
             Administrator access only.
@@ -2750,43 +3802,55 @@ function openAdminLogin(){
 
         <div class="form-group">
 
-            <label>Admin Password</label>
+            <label>
+                Admin Password
+            </label>
 
             <input
                 id="adminPasswordInput"
                 type="password"
                 placeholder="Enter password"
                 onkeydown="
-                    if(event.key==='Enter'){
-                        loginAdmin();
-                    }
-                "
-            >
+                    if(event.key==='Enter')
+                        loginAdmin()
+                ">
 
         </div>
 
         <button
             class="gold-btn"
             style="width:100%"
-            onclick="loginAdmin()"
-        >
+            onclick="loginAdmin()">
+
             ENTER ADMIN
+
         </button>
 
     `);
 
 }
 
+
 function loginAdmin(){
 
-    const password=
+    const input =
         document.getElementById(
             "adminPasswordInput"
-        ).value;
+        );
 
-    if(password!==JEM_SETTINGS.adminPassword){
+    if(!input){
+        return;
+    }
 
-        toast("WRONG ADMIN PASSWORD");
+    if(
+        input.value !==
+        JEM_SETTINGS.adminPassword
+    ){
+
+        toast(
+            "WRONG ADMIN PASSWORD"
+        );
+
         return;
 
     }
@@ -2796,15 +3860,17 @@ function loginAdmin(){
 }
 
 
-/* ==========================================================
+/* =========================================================
    ADMIN PANEL
-========================================================== */
+========================================================= */
 
-async function openAdminPanel(){
+function openAdminPanel(){
 
     openPopup(`
 
-        <h2>JEM ADMIN PANEL</h2>
+        <h2>
+            JEM ADMIN PANEL
+        </h2>
 
         <p class="modal-sub">
             Manage JEM Theatres.
@@ -2812,155 +3878,214 @@ async function openAdminPanel(){
 
         <div class="admin-tabs">
 
-            <button class="active"
+            <button
+                class="active"
                 onclick="adminTab('movies',this)">
                 MOVIES
             </button>
 
-            <button onclick="adminTab('coming',this)">
+            <button
+                onclick="adminTab('coming',this)">
                 COMING SOON
             </button>
 
-            <button onclick="adminTab('intro',this)">
+            <button
+                onclick="adminTab('intro',this)">
                 INTRO
             </button>
 
-            <button onclick="adminTab('settings',this)">
+            <button
+                onclick="adminTab('settings',this)">
                 SETTINGS
             </button>
 
-            <button onclick="adminTab('seats',this)">
+            <button
+                onclick="adminTab('seats',this)">
                 SEATS
             </button>
 
         </div>
 
-        <div id="adminMovies" class="admin-section active">
+
+        <!-- MOVIES -->
+
+        <div
+            id="adminMovies"
+            class="admin-section active">
 
             <div
                 id="adminMovieGrid"
-                class="admin-grid"
-            ></div>
+                class="admin-grid">
+            </div>
 
         </div>
 
-        <div id="adminComing" class="admin-section">
 
-            <h3>COMING SOON MANAGER</h3>
+        <!-- COMING SOON -->
 
-            <p class="muted" style="margin:8px 0 18px">
-                Change exactly what appears in the Coming Soon
-                section of the website.
+        <div
+            id="adminComing"
+            class="admin-section">
+
+            <h3>
+                COMING SOON MANAGER
+            </h3>
+
+            <p
+                class="muted"
+                style="margin:8px 0 18px">
+
+                Change what appears in Coming Soon.
+
             </p>
 
             <button
                 class="gold-btn"
-                onclick="addComingMovie()"
-            >
+                onclick="addComingMovie()">
+
                 + ADD MOVIE
+
             </button>
 
             <br><br>
 
             <div
                 id="adminComingMovies"
-                class="admin-grid"
-            ></div>
+                class="admin-grid">
+            </div>
 
         </div>
 
-        <div id="adminIntro" class="admin-section">
 
-            <h3>INTRO VIDEO</h3>
+        <!-- INTRO -->
 
-            <p class="muted" style="margin:8px 0 18px">
-                Upload an actual JEM intro video here.
-                YouTube trailer links cannot be uploaded as video files.
+        <div
+            id="adminIntro"
+            class="admin-section">
+
+            <h3>
+                INTRO VIDEO
+            </h3>
+
+            <p
+                class="muted"
+                style="margin:8px 0 18px">
+
+                Upload a JEM intro video.
+
             </p>
 
             <video
                 id="adminIntroVideo"
                 class="admin-video"
                 controls
-                playsinline
-            ></video>
+                playsinline>
+            </video>
 
-            <div id="introDrop" class="drop-zone">
+            <div
+                id="introDrop"
+                class="drop-zone">
 
                 <strong>
                     DROP INTRO VIDEO HERE
                 </strong>
 
                 <span>
-                    or click to choose a video
+                    or tap to choose a video
                 </span>
 
                 <input
                     id="introFile"
                     type="file"
-                    accept="video/*"
-                    hidden
-                >
+                    accept="video/*">
 
             </div>
 
             <button
                 class="danger-btn"
-                onclick="removeIntroVideo()"
-            >
+                onclick="removeIntroVideo()">
+
                 REMOVE INTRO
+
             </button>
 
         </div>
 
-        <div id="adminSettings" class="admin-section">
 
-            <h3>THEATRE SETTINGS</h3>
+        <!-- SETTINGS -->
+
+        <div
+            id="adminSettings"
+            class="admin-section">
+
+            <h3>
+                THEATRE SETTINGS
+            </h3>
 
             <br>
 
             <div class="settings-grid">
 
                 <div class="setting">
-                    <label>Standard Ticket Price</label>
+
+                    <label>
+                        Standard Ticket Price
+                    </label>
+
                     <input
                         id="settingTicketPrice"
                         type="number"
-                        step=".01"
-                    >
+                        step=".01">
+
                 </div>
 
                 <div class="setting">
-                    <label>Premium Ticket Price</label>
+
+                    <label>
+                        Premium Ticket Price
+                    </label>
+
                     <input
                         id="settingPremiumPrice"
                         type="number"
-                        step=".01"
-                    >
+                        step=".01">
+
                 </div>
 
                 <div class="setting">
-                    <label>Minimum Taken Seats</label>
+
+                    <label>
+                        Minimum Taken Seats
+                    </label>
+
                     <input
                         id="settingMinSeats"
-                        type="number"
-                    >
+                        type="number">
+
                 </div>
 
                 <div class="setting">
-                    <label>Maximum Taken Seats</label>
+
+                    <label>
+                        Maximum Taken Seats
+                    </label>
+
                     <input
                         id="settingMaxSeats"
-                        type="number"
-                    >
+                        type="number">
+
                 </div>
 
                 <div class="setting">
-                    <label>Admin Password</label>
+
+                    <label>
+                        Admin Password
+                    </label>
+
                     <input
                         id="settingAdminPassword"
-                        type="text"
-                    >
+                        type="text">
+
                 </div>
 
             </div>
@@ -2969,34 +4094,46 @@ async function openAdminPanel(){
 
             <button
                 class="gold-btn"
-                onclick="saveSettings()"
-            >
+                onclick="saveSettings()">
+
                 SAVE SETTINGS
+
             </button>
 
         </div>
 
-        <div id="adminSeats" class="admin-section">
 
-            <h3>SEAT INVENTORY</h3>
+        <!-- SEATS -->
 
-            <p class="muted" style="margin:8px 0 18px">
-                Resetting the seat inventory will create new
-                random unavailable seats.
+        <div
+            id="adminSeats"
+            class="admin-section">
+
+            <h3>
+                SEAT INVENTORY
+            </h3>
+
+            <p
+                class="muted"
+                style="margin:8px 0 18px">
+
+                Reset seat inventory.
+
             </p>
 
             <button
                 class="danger-btn"
-                onclick="resetSeats()"
-            >
+                onclick="resetSeats()">
+
                 RESET ALL SEATS
+
             </button>
 
         </div>
 
     `);
 
-    await createAdminMovies();
+    createAdminMovies();
 
     createAdminComingMovies();
 
@@ -3009,143 +4146,161 @@ async function openAdminPanel(){
 }
 
 
-/* ==========================================================
+/* =========================================================
    ADMIN TABS
-========================================================== */
+========================================================= */
 
 function adminTab(tab,button){
 
     document
         .querySelectorAll(".admin-section")
-        .forEach(section=>{
+        .forEach(section => {
             section.classList.remove("active");
         });
 
     document
         .querySelectorAll(".admin-tabs button")
-        .forEach(btn=>{
+        .forEach(btn => {
             btn.classList.remove("active");
         });
 
-    const section=
+    const section =
         document.getElementById(
-            "admin"+
-            tab.charAt(0).toUpperCase()+
+            "admin"
+            +
+            tab.charAt(0).toUpperCase()
+            +
             tab.slice(1)
         );
 
     if(section){
+
         section.classList.add("active");
+
     }
 
-    if(button){
-        button.classList.add("active");
-    }
-
-    if(tab==="coming"){
-        createAdminComingMovies();
-    }
+    button.classList.add("active");
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    ADMIN MOVIES
-========================================================== */
+========================================================= */
 
 async function createAdminMovies(){
 
-    const container=
-        document.getElementById("adminMovieGrid");
+    const container =
+        document.getElementById(
+            "adminMovieGrid"
+        );
 
-    if(!container)return;
+    if(!container){
+        return;
+    }
 
-    container.innerHTML="";
+    container.innerHTML = "";
 
     for(const [key,movie] of Object.entries(movies)){
 
-        const savedPoster=
-            await getUpload("poster_"+key)
-            .catch(()=>null);
+        let poster =
+            movie.poster;
 
-        let poster=movie.poster;
+        try{
 
-        if(savedPoster){
-            poster=URL.createObjectURL(savedPoster);
-        }
+            const uploaded =
+                await getUpload(
+                    "poster_"+key
+                );
 
-        container.innerHTML+=`
+            if(uploaded){
+
+                poster =
+                    URL.createObjectURL(
+                        uploaded
+                    );
+
+            }
+
+        }catch{}
+
+        container.innerHTML += `
 
             <div class="admin-movie-card">
 
                 <h3>
                     EDIT:
-                    ${escapeHTML(movie.title)}
+                    ${esc(movie.title)}
                 </h3>
 
                 <img
                     id="adminPosterPreview_${key}"
                     class="admin-poster-preview"
-                    src="${escapeHTML(poster)}"
-                >
+                    src="${esc(poster)}"
+                    onerror="
+                        this.onerror=null;
+                        this.src='${posterFallback(movie.title)}'
+                    ">
 
-                <label>Movie Name</label>
+                <label>
+                    Movie Name
+                </label>
 
                 <input
                     id="movieTitle_${key}"
-                    value="${escapeHTML(movie.title)}"
-                >
+                    value="${esc(movie.title)}">
 
                 <div
                     class="drop-zone movie-drop"
-                    data-movie="${key}"
-                >
+                    data-movie="${key}">
 
                     <strong>
                         DROP POSTER HERE
                     </strong>
 
                     <span>
-                        or click to choose a poster
+                        or tap to choose a poster
                     </span>
 
                     <input
                         id="posterFile_${key}"
                         type="file"
-                        accept="image/*"
-                        hidden
-                    >
+                        accept="image/*">
 
                 </div>
 
-                <label>Poster URL</label>
+                <label>
+                    Poster URL
+                </label>
 
                 <input
                     id="posterUrl_${key}"
-                    value="${escapeHTML(movie.poster)}"
-                >
+                    value="${esc(movie.poster)}">
 
-                <label>Trailer URL</label>
+                <label>
+                    Trailer URL
+                </label>
 
                 <input
                     id="trailerUrl_${key}"
-                    value="${escapeHTML(movie.trailer)}"
-                >
+                    value="${esc(movie.trailer)}">
 
-                <label>Showtimes</label>
+                <label>
+                    Showtimes
+                </label>
 
                 <input
                     id="times_${key}"
-                    value="${escapeHTML(movie.times.join(", "))}"
-                >
+                    value="${esc(movie.times.join(", "))}">
 
                 <div class="admin-actions">
 
                     <button
                         class="gold-btn"
-                        onclick="saveMovie('${key}')"
-                    >
+                        onclick="saveMovie('${key}')">
+
                         SAVE MOVIE
+
                     </button>
 
                 </div>
@@ -3160,54 +4315,74 @@ async function createAdminMovies(){
 
 }
 
+
 function setupMovieDropZones(){
 
     document
         .querySelectorAll(".movie-drop")
-        .forEach(zone=>{
+        .forEach(zone => {
 
-            const key=zone.dataset.movie;
+            const key =
+                zone.dataset.movie;
 
-            const input=
+            const input =
                 document.getElementById(
                     "posterFile_"+key
                 );
 
-            if(!input)return;
-
-            zone.onclick=()=>{
+            zone.onclick = () => {
                 input.click();
             };
 
-            zone.ondragover=event=>{
-                event.preventDefault();
-                zone.classList.add("dragging");
-            };
-
-            zone.ondragleave=()=>{
-                zone.classList.remove("dragging");
-            };
-
-            zone.ondrop=event=>{
+            zone.ondragover = event => {
 
                 event.preventDefault();
-                zone.classList.remove("dragging");
 
-                const file=
+                zone.classList.add(
+                    "dragging"
+                );
+
+            };
+
+            zone.ondragleave = () => {
+
+                zone.classList.remove(
+                    "dragging"
+                );
+
+            };
+
+            zone.ondrop = event => {
+
+                event.preventDefault();
+
+                zone.classList.remove(
+                    "dragging"
+                );
+
+                const file =
                     event.dataTransfer.files[0];
 
                 if(file){
-                    handlePosterFile(file,key);
+
+                    handlePosterFile(
+                        file,
+                        key
+                    );
+
                 }
 
             };
 
-            input.onchange=()=>{
+            input.onchange = () => {
 
-                const file=input.files[0];
+                if(input.files[0]){
 
-                if(file){
-                    handlePosterFile(file,key);
+                    handlePosterFile(
+                        input.files[0],
+                        key
+                    );
+
                 }
 
             };
@@ -3216,27 +4391,50 @@ function setupMovieDropZones(){
 
 }
 
+
+/*
+    FIX:
+    Uploaded posters stay saved in IndexedDB.
+    The URL is no longer allowed to overwrite the
+    uploaded poster unless the admin specifically
+    changes it.
+*/
+
 async function handlePosterFile(file,key){
 
     if(!file.type.startsWith("image/")){
 
         toast("PLEASE USE AN IMAGE");
+
         return;
 
     }
 
-    await saveUpload(
+    if(file.size > 15 * 1024 * 1024){
+
+        toast(
+            "POSTER MUST BE UNDER 15MB"
+        );
+
+        return;
+
+    }
+
+    await putUpload(
         "poster_"+key,
         file
     );
 
-    const preview=
+    const preview =
         document.getElementById(
             "adminPosterPreview_"+key
         );
 
     if(preview){
-        preview.src=URL.createObjectURL(file);
+
+        preview.src =
+            URL.createObjectURL(file);
+
     }
 
     await renderMovies();
@@ -3245,146 +4443,183 @@ async function handlePosterFile(file,key){
 
 }
 
-function saveMovie(key){
 
-    const titleInput=
-        document.getElementById("movieTitle_"+key);
+/* =========================================================
+   SAVE MOVIE
+========================================================= */
 
-    const posterInput=
-        document.getElementById("posterUrl_"+key);
+async function saveMovie(key){
 
-    const trailerInput=
-        document.getElementById("trailerUrl_"+key);
+    const movie =
+        movies[key];
 
-    const timesInput=
-        document.getElementById("times_"+key);
-
-    if(
-        !titleInput||
-        !posterInput||
-        !trailerInput||
-        !timesInput
-    ){
-
-        toast("COULD NOT SAVE MOVIE");
+    if(!movie){
         return;
+    }
+
+    const titleInput =
+        document.getElementById(
+            "movieTitle_"+key
+        );
+
+    const posterInput =
+        document.getElementById(
+            "posterUrl_"+key
+        );
+
+    const trailerInput =
+        document.getElementById(
+            "trailerUrl_"+key
+        );
+
+    const timesInput =
+        document.getElementById(
+            "times_"+key
+        );
+
+    movie.title =
+        titleInput.value.trim()
+        ||
+        movie.title;
+
+    /*
+       Only update poster URL if there is
+       no uploaded poster.
+    */
+    let uploadedPoster = null;
+
+    try{
+
+        uploadedPoster =
+            await getUpload(
+                "poster_"+key
+            );
+
+    }catch{}
+
+    if(!uploadedPoster){
+
+        movie.poster =
+            posterInput.value.trim()
+            ||
+            movie.poster;
 
     }
 
-    const title=
-        titleInput.value.trim();
+    movie.trailer =
+        trailerInput.value.trim()
+        ||
+        movie.trailer;
 
-    if(!title){
-
-        toast("MOVIE NAME CANNOT BE EMPTY");
-        return;
-
-    }
-
-    movies[key].title=title;
-    movies[key].poster=posterInput.value.trim();
-    movies[key].trailer=trailerInput.value.trim();
-
-    movies[key].times=
+    movie.times =
         timesInput.value
-        .split(",")
-        .map(x=>x.trim())
-        .filter(Boolean);
+            .split(",")
+            .map(x => x.trim())
+            .filter(Boolean);
 
     localStorage.setItem(
         "jemMovieSettings",
         JSON.stringify(movies)
     );
 
-    renderMovies();
-    createAdminMovies();
+    await renderMovies();
+
+    await createAdminMovies();
 
     toast(
-        movies[key].title.toUpperCase()+
+        movie.title.toUpperCase()
+        +
         " SAVED!"
     );
 
 }
 
 
-/* ==========================================================
-   ADMIN COMING SOON
-========================================================== */
+/* =========================================================
+   COMING SOON ADMIN
+========================================================= */
 
 function createAdminComingMovies(){
 
-    const container=
+    const container =
         document.getElementById(
             "adminComingMovies"
         );
 
-    if(!container)return;
+    if(!container){
+        return;
+    }
 
-    container.innerHTML="";
+    container.innerHTML = "";
 
-    comingSoon.forEach((movie,index)=>{
+    comingSoon.forEach((movie,index) => {
 
-        container.innerHTML+=`
+        container.innerHTML += `
 
             <div class="admin-movie-card">
 
                 <h3>
-                    COMING SOON MOVIE ${index+1}
+                    COMING SOON MOVIE
+                    ${index+1}
                 </h3>
 
                 <img
                     id="comingPreview${index}"
                     class="admin-poster-preview"
-                    src="${escapeHTML(movie.poster)}"
-                >
+                    src="${esc(movie.poster)}"
+                    onerror="
+                        this.onerror=null;
+                        this.src='${posterFallback(movie.title)}'
+                    ">
 
-                <label>Movie Title</label>
+                <label>
+                    Movie Title
+                </label>
 
                 <input
                     id="comingTitle${index}"
-                    value="${escapeHTML(movie.title)}"
-                >
+                    value="${esc(movie.title)}">
 
-                <label>Release Date</label>
+                <label>
+                    Release Date
+                </label>
 
                 <input
                     id="comingDate${index}"
-                    value="${escapeHTML(movie.date)}"
-                >
+                    value="${esc(movie.date)}">
 
-                <label>Poster URL</label>
+                <label>
+                    Poster URL
+                </label>
 
                 <input
                     id="comingPoster${index}"
-                    value="${escapeHTML(movie.poster)}"
-                >
+                    value="${esc(movie.poster)}">
 
-                <label>Trailer URL</label>
+                <label>
+                    Trailer URL
+                </label>
 
                 <input
                     id="comingTrailer${index}"
-                    value="${escapeHTML(movie.trailer)}"
-                >
+                    value="${esc(movie.trailer)}">
 
                 <div
                     class="drop-zone coming-drop"
-                    data-index="${index}"
-                >
+                    data-index="${index}">
 
                     <strong>
                         DROP POSTER HERE
                     </strong>
 
                     <span>
-                        or click to choose a poster
+                        or tap to choose a poster
                     </span>
 
                     <input
-                        type="file"
-                        accept="image/*"
-                        hidden
                         id="comingFile${index}"
-                    >
+                        type="file"
+                        accept="image/*">
 
                 </div>
 
@@ -3392,16 +4627,18 @@ function createAdminComingMovies(){
 
                     <button
                         class="gold-btn"
-                        onclick="saveComingMovie(${index})"
-                    >
+                        onclick="saveComingMovie(${index})">
+
                         SAVE MOVIE
+
                     </button>
 
                     <button
                         class="danger-btn"
-                        onclick="deleteComingMovie(${index})"
-                    >
+                        onclick="deleteComingMovie(${index})">
+
                         DELETE
+
                     </button>
 
                 </div>
@@ -3416,54 +4653,74 @@ function createAdminComingMovies(){
 
 }
 
+
 function setupComingDropZones(){
 
     document
         .querySelectorAll(".coming-drop")
-        .forEach(zone=>{
+        .forEach(zone => {
 
-            const index=zone.dataset.index;
+            const index =
+                Number(zone.dataset.index);
 
-            const input=
+            const input =
                 document.getElementById(
                     "comingFile"+index
                 );
 
-            if(!input)return;
-
-            zone.onclick=()=>{
+            zone.onclick = () => {
                 input.click();
             };
 
-            zone.ondragover=event=>{
-                event.preventDefault();
-                zone.classList.add("dragging");
-            };
-
-            zone.ondragleave=()=>{
-                zone.classList.remove("dragging");
-            };
-
-            zone.ondrop=event=>{
+            zone.ondragover = event => {
 
                 event.preventDefault();
-                zone.classList.remove("dragging");
 
-                const file=
+                zone.classList.add(
+                    "dragging"
+                );
+
+            };
+
+            zone.ondragleave = () => {
+
+                zone.classList.remove(
+                    "dragging"
+                );
+
+            };
+
+            zone.ondrop = event => {
+
+                event.preventDefault();
+
+                zone.classList.remove(
+                    "dragging"
+                );
+
+                const file =
                     event.dataTransfer.files[0];
 
                 if(file){
-                    handleComingPoster(file,index);
+
+                    handleComingPoster(
+                        file,
+                        index
+                    );
+
                 }
 
             };
 
-            input.onchange=()=>{
+            input.onchange = () => {
 
-                const file=input.files[0];
+                if(input.files[0]){
 
-                if(file){
-                    handleComingPoster(file,index);
+                    handleComingPoster(
+                        input.files[0],
+                        index
+                    );
+
                 }
 
             };
@@ -3472,42 +4729,40 @@ function setupComingDropZones(){
 
 }
 
+
 function handleComingPoster(file,index){
 
     if(!file.type.startsWith("image/")){
 
         toast("PLEASE USE AN IMAGE");
+
         return;
 
     }
 
-    const reader=new FileReader();
+    if(file.size > 15 * 1024 * 1024){
 
-    reader.onload=()=>{
+        toast(
+            "POSTER MUST BE UNDER 15MB"
+        );
 
-        comingSoon[index].poster=reader.result;
+        return;
 
-        const posterInput=
-            document.getElementById(
-                "comingPoster"+index
-            );
+    }
 
-        const preview=
-            document.getElementById(
-                "comingPreview"+index
-            );
+    const reader =
+        new FileReader();
 
-        if(posterInput){
-            posterInput.value=reader.result;
-        }
+    reader.onload = () => {
 
-        if(preview){
-            preview.src=reader.result;
-        }
+        comingSoon[index].poster =
+            reader.result;
 
         saveComingSoon();
 
-        toast("COMING SOON POSTER UPDATED");
+        toast(
+            "COMING SOON POSTER UPDATED"
+        );
 
     };
 
@@ -3515,61 +4770,76 @@ function handleComingPoster(file,index){
 
 }
 
+
+function saveComingSoon(){
+
+    localStorage.setItem(
+        "jemComingSoon",
+        JSON.stringify(comingSoon)
+    );
+
+    renderComingSoon();
+
+    createAdminComingMovies();
+
+}
+
+
 function saveComingMovie(index){
 
-    const title=
+    const movie =
+        comingSoon[index];
+
+    movie.title =
         document.getElementById(
             "comingTitle"+index
-        ).value.trim();
+        ).value.trim()
+        ||
+        "NEW MOVIE";
 
-    const date=
+    movie.date =
         document.getElementById(
             "comingDate"+index
-        ).value.trim();
+        ).value.trim()
+        ||
+        "COMING SOON";
 
-    const poster=
+    movie.poster =
         document.getElementById(
             "comingPoster"+index
-        ).value.trim();
+        ).value.trim()
+        ||
+        movie.poster;
 
-    const trailer=
+    movie.trailer =
         document.getElementById(
             "comingTrailer"+index
-        ).value.trim();
-
-    if(!title){
-
-        toast("MOVIE TITLE CANNOT BE EMPTY");
-        return;
-
-    }
-
-    comingSoon[index].title=title;
-    comingSoon[index].date=date||"COMING SOON";
-    comingSoon[index].poster=poster;
-    comingSoon[index].trailer=trailer;
+        ).value.trim()
+        ||
+        movie.trailer;
 
     saveComingSoon();
 
-    toast(
-        title.toUpperCase()+
-        " SAVED!"
-    );
+    toast("MOVIE SAVED!");
 
 }
+
 
 function addComingMovie(){
 
     comingSoon.push({
 
-        id:"movie-"+Date.now(),
+        id:
+            "movie-"+Date.now(),
 
-        title:"NEW MOVIE",
+        title:
+            "NEW MOVIE",
 
-        date:"COMING SOON",
+        date:
+            "COMING SOON",
 
         poster:
-            "https://via.placeholder.com/600x900/171717/e11d2e?text=JEM+THEATRES",
+            posterFallback("JEM THEATRES"),
 
         trailer:
             "https://www.youtube.com/"
@@ -3578,409 +4848,603 @@ function addComingMovie(){
 
     saveComingSoon();
 
-    toast("NEW MOVIE ADDED");
+    toast(
+        "NEW MOVIE ADDED"
+    );
 
 }
+
 
 function deleteComingMovie(index){
 
-    if(!confirm(
-        "Delete this Coming Soon movie?"
-    ))return;
+    if(
+        confirm(
+            "Delete this Coming Soon movie?"
+        )
+    ){
 
-    comingSoon.splice(index,1);
+        comingSoon.splice(
+            index,
+            1
+        );
 
-    saveComingSoon();
+        saveComingSoon();
 
-    toast("MOVIE DELETED");
+        toast(
+            "MOVIE DELETED"
+        );
+
+    }
 
 }
 
 
-/* ==========================================================
-   ADMIN INTRO
-========================================================== */
+/* =========================================================
+   INTRO ADMIN
+========================================================= */
 
 function setupIntroDropZone(){
 
-    const zone=
-        document.getElementById("introDrop");
+    const zone =
+        document.getElementById(
+            "introDrop"
+        );
 
-    const input=
-        document.getElementById("introFile");
+    const input =
+        document.getElementById(
+            "introFile"
+        );
 
-    if(!zone||!input)return;
+    if(!zone || !input){
+        return;
+    }
 
-    zone.onclick=()=>{
+    zone.onclick = () => {
         input.click();
     };
 
-    zone.ondragover=event=>{
-        event.preventDefault();
-        zone.classList.add("dragging");
-    };
-
-    zone.ondragleave=()=>{
-        zone.classList.remove("dragging");
-    };
-
-    zone.ondrop=event=>{
+    zone.ondragover = event => {
 
         event.preventDefault();
-        zone.classList.remove("dragging");
 
-        const file=
+        zone.classList.add(
+            "dragging"
+        );
+
+    };
+
+    zone.ondragleave = () => {
+
+        zone.classList.remove(
+            "dragging"
+        );
+
+    };
+
+    zone.ondrop = event => {
+
+        event.preventDefault();
+
+        zone.classList.remove(
+            "dragging"
+        );
+
+        const file =
             event.dataTransfer.files[0];
 
         if(file){
+
             handleIntroFile(file);
+
         }
 
     };
 
-    input.onchange=()=>{
+    input.onchange = () => {
 
-        const file=input.files[0];
+        if(input.files[0]){
 
-        if(file){
-            handleIntroFile(file);
+            handleIntroFile(
+                input.files[0]
+            );
+
         }
 
     };
 
 }
+
 
 async function handleIntroFile(file){
 
     if(!file.type.startsWith("video/")){
 
-        toast("PLEASE USE A VIDEO FILE");
+        toast(
+            "PLEASE USE A VIDEO FILE"
+        );
+
         return;
 
     }
 
-    await saveUpload(
+    if(file.size > 250 * 1024 * 1024){
+
+        toast(
+            "VIDEO MUST BE UNDER 250MB"
+        );
+
+        return;
+
+    }
+
+    await putUpload(
         "introVideo",
         file
     );
 
-    loadIntroVideo();
-    loadAdminIntro();
+    await loadIntroVideo();
 
-    toast("JEM INTRO UPDATED");
+    await loadAdminIntro();
+
+    toast(
+        "JEM INTRO UPDATED"
+    );
 
 }
+
 
 async function loadIntroVideo(){
 
-    const video=
-        document.getElementById("introVideo");
+    const video =
+        document.getElementById(
+            "introVideo"
+        );
 
-    const youtube=
-        document.getElementById("youtubeIntro");
+    const youtube =
+        document.getElementById(
+            "youtubeIntro"
+        );
 
-    if(!video||!db)return;
+    try{
 
-    const file=
-        await getUpload("introVideo")
-        .catch(()=>null);
+        const file =
+            await getUpload(
+                "introVideo"
+            );
 
-    if(file){
+        if(file){
 
-        video.src=URL.createObjectURL(file);
-        video.style.display="block";
+            video.src =
+                URL.createObjectURL(file);
 
-        if(youtube){
-            youtube.style.display="none";
+            video.style.display =
+                "block";
+
+            youtube.style.display =
+                "none";
+
+        }else{
+
+            video.style.display =
+                "none";
+
+            youtube.style.display =
+                "block";
+
         }
+
+    }catch{
+
+        video.style.display =
+            "none";
+
+        youtube.style.display =
+            "block";
 
     }
 
 }
+
 
 async function loadAdminIntro(){
 
-    const video=
-        document.getElementById("adminIntroVideo");
+    const video =
+        document.getElementById(
+            "adminIntroVideo"
+        );
 
-    if(!video||!db)return;
+    if(!video){
+        return;
+    }
 
-    const file=
-        await getUpload("introVideo")
-        .catch(()=>null);
+    try{
 
-    if(file){
-        video.src=URL.createObjectURL(file);
+        const file =
+            await getUpload(
+                "introVideo"
+            );
+
+        if(file){
+
+            video.src =
+                URL.createObjectURL(file);
+
+        }else{
+
+            video.removeAttribute(
+                "src"
+            );
+
+        }
+
+    }catch{}
+
+}
+
+
+async function removeIntroVideo(){
+
+    try{
+
+        await delUpload(
+            "introVideo"
+        );
+
+    }catch{}
+
+    const video =
+        document.getElementById(
+            "introVideo"
+        );
+
+    const youtube =
+        document.getElementById(
+            "youtubeIntro"
+        );
+
+    if(video){
+
+        video.pause();
+
+        video.removeAttribute(
+            "src"
+        );
+
+        video.load();
+
+        video.style.display =
+            "none";
+
+    }
+
+    if(youtube){
+
+        youtube.style.display =
+            "block";
+
+    }
+
+    toast(
+        "INTRO REMOVED"
+    );
+
+}
+
+
+/* =========================================================
+   SAVED SETTINGS
+========================================================= */
+
+function loadSaved(){
+
+    const settings =
+        JSON.parse(
+            localStorage.getItem(
+                "jemSettings"
+            )
+            ||
+            "null"
+        );
+
+    const movieSettings =
+        JSON.parse(
+            localStorage.getItem(
+                "jemMovieSettings"
+            )
+            ||
+            "null"
+        );
+
+    if(settings){
+
+        Object.assign(
+            JEM_SETTINGS,
+            settings
+        );
+
+    }
+
+    if(movieSettings){
+
+        Object.keys(movieSettings)
+            .forEach(key => {
+
+                if(movies[key]){
+
+                    Object.assign(
+                        movies[key],
+                        movieSettings[key]
+                    );
+
+                }
+
+            });
+
     }
 
 }
 
-async function removeIntroVideo(){
 
-    await deleteUpload("introVideo");
-
-    document
-        .getElementById("introVideo")
-        .removeAttribute("src");
-
-    document
-        .getElementById("introVideo")
-        .style.display="none";
-
-    document
-        .getElementById("adminIntroVideo")
-        .removeAttribute("src");
-
-    document
-        .getElementById("youtubeIntro")
-        .style.display="block";
-
-    toast("INTRO REMOVED");
-
-}
-
-
-/* ==========================================================
-   SETTINGS
-========================================================== */
+/* =========================================================
+   ADMIN SETTINGS
+========================================================= */
 
 function loadAdminSettings(){
 
-    const ticket=
+    const ticket =
         document.getElementById(
             "settingTicketPrice"
         );
 
-    if(!ticket)return;
+    const premium =
+        document.getElementById(
+            "settingPremiumPrice"
+        );
 
-    ticket.value=JEM_SETTINGS.ticketPrice;
+    const minSeats =
+        document.getElementById(
+            "settingMinSeats"
+        );
 
-    document.getElementById(
-        "settingPremiumPrice"
-    ).value=
+    const maxSeats =
+        document.getElementById(
+            "settingMaxSeats"
+        );
+
+    const password =
+        document.getElementById(
+            "settingAdminPassword"
+        );
+
+    if(!ticket){
+        return;
+    }
+
+    ticket.value =
+        JEM_SETTINGS.ticketPrice;
+
+    premium.value =
         JEM_SETTINGS.premiumTicketPrice;
 
-    document.getElementById(
-        "settingMinSeats"
-    ).value=
+    minSeats.value =
         JEM_SETTINGS.minTakenSeats;
 
-    document.getElementById(
-        "settingMaxSeats"
-    ).value=
+    maxSeats.value =
         JEM_SETTINGS.maxTakenSeats;
 
-    document.getElementById(
-        "settingAdminPassword"
-    ).value=
+    password.value =
         JEM_SETTINGS.adminPassword;
 
 }
 
+
 function saveSettings(){
 
-    JEM_SETTINGS.ticketPrice=
+    JEM_SETTINGS.ticketPrice =
         Number(
             document.getElementById(
                 "settingTicketPrice"
             ).value
         );
 
-    JEM_SETTINGS.premiumTicketPrice=
+    JEM_SETTINGS.premiumTicketPrice =
         Number(
             document.getElementById(
                 "settingPremiumPrice"
             ).value
         );
 
-    JEM_SETTINGS.minTakenSeats=
+    JEM_SETTINGS.minTakenSeats =
         Number(
             document.getElementById(
                 "settingMinSeats"
             ).value
         );
 
-    JEM_SETTINGS.maxTakenSeats=
+    JEM_SETTINGS.maxTakenSeats =
         Number(
             document.getElementById(
                 "settingMaxSeats"
             ).value
         );
 
-    JEM_SETTINGS.adminPassword=
+    JEM_SETTINGS.adminPassword =
         document.getElementById(
             "settingAdminPassword"
         ).value;
 
-    localStorage.setItem(
-        "jemSettings",
-        JSON.stringify(JEM_SETTINGS)
-    );
+    if(
+        JEM_SETTINGS.maxTakenSeats
+        <
+        JEM_SETTINGS.minTakenSeats
+    ){
 
-    const premiumPriceDisplay=
-        document.getElementById(
-            "premiumPriceDisplay"
-        );
-
-    if(premiumPriceDisplay){
-
-        premiumPriceDisplay.textContent=
-            "$"+
-            JEM_SETTINGS.premiumTicketPrice.toFixed(2);
+        JEM_SETTINGS.maxTakenSeats =
+            JEM_SETTINGS.minTakenSeats;
 
     }
 
-    toast("SETTINGS SAVED");
+    localStorage.setItem(
+        "jemSettings",
+        JSON.stringify(
+            JEM_SETTINGS
+        )
+    );
+
+    document.getElementById(
+        "premiumPriceDisplay"
+    ).textContent =
+        "$"
+        +
+        JEM_SETTINGS.premiumTicketPrice
+            .toFixed(2);
+
+    toast(
+        "SETTINGS SAVED"
+    );
 
 }
+
+
+/* =========================================================
+   RESET SEATS
+========================================================= */
 
 function resetSeats(){
 
-    if(!confirm(
-        "Reset every movie's seat inventory?"
-    ))return;
+    if(
+        confirm(
+            "Reset every movie's seat inventory?"
+        )
+    ){
 
-    Object.keys(localStorage)
-        .filter(key=>key.startsWith("jemSeats_"))
-        .forEach(key=>{
-            localStorage.removeItem(key);
-        });
-
-    toast("ALL SEATS RESET");
-
-}
-
-
-/* ==========================================================
-   SAVED DATA
-========================================================== */
-
-function loadSavedSettings(){
-
-    const saved=
-        JSON.parse(
-            localStorage.getItem("jemSettings")
+        Object.keys(
+            localStorage
+        )
+        .filter(
+            key =>
+                key.startsWith(
+                    "jemSeats_"
+                )
+        )
+        .forEach(
+            key =>
+                localStorage.removeItem(
+                    key
+                )
         );
 
-    if(saved){
-        Object.assign(JEM_SETTINGS,saved);
-    }
-
-}
-
-function loadSavedMovies(){
-
-    const saved=
-        JSON.parse(
-            localStorage.getItem("jemMovieSettings")
+        toast(
+            "ALL SEATS RESET"
         );
-
-    if(saved){
-
-        Object.keys(saved).forEach(key=>{
-
-            if(movies[key]){
-
-                Object.assign(
-                    movies[key],
-                    saved[key]
-                );
-
-            }
-
-        });
 
     }
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    LOCATION
-========================================================== */
+========================================================= */
 
 document
     .getElementById("locationSelect")
     .addEventListener(
         "change",
-        function(){
+        event => {
 
             localStorage.setItem(
                 "jemLocation",
-                this.value
+                event.target.value
             );
 
             toast(
-                "LOCATION: "+
-                this.value.toUpperCase()
+                "LOCATION: "
+                +
+                event.target.value.toUpperCase()
             );
 
         }
     );
 
 
-/* ==========================================================
-   START
-========================================================== */
+/* =========================================================
+   START JEM
+========================================================= */
 
 async function startJEM(){
 
-    loadSavedSettings();
+    loadSaved();
 
-    loadSavedMovies();
-
-    forceNewComingSoonLineup();
-
-    const savedLocation=
-        localStorage.getItem("jemLocation");
+    const savedLocation =
+        localStorage.getItem(
+            "jemLocation"
+        );
 
     if(savedLocation){
 
-        const locationSelect=
+        const select =
             document.getElementById(
                 "locationSelect"
             );
 
         if(
-            [...locationSelect.options]
-            .some(
-                option=>
-                    option.value===savedLocation
-            )
+            [...select.options]
+                .some(
+                    option =>
+                        option.value ===
+                        savedLocation
+                )
         ){
 
-            locationSelect.value=savedLocation;
+            select.value =
+                savedLocation;
 
         }
 
     }
 
-    await openDatabase();
+    try{
 
-    renderMovies();
+        await openDB();
+
+    }catch(error){
+
+        console.error(
+            "IndexedDB error:",
+            error
+        );
+
+        toast(
+            "LOCAL STORAGE ERROR"
+        );
+
+    }
+
+    await renderMovies();
 
     renderComingSoon();
 
     renderFood();
 
-    loadIntroVideo();
+    await loadIntroVideo();
 
     updateAccountUI();
 
-    const premiumPriceDisplay=
-        document.getElementById(
-            "premiumPriceDisplay"
-        );
-
-    if(premiumPriceDisplay){
-
-        premiumPriceDisplay.textContent=
-            "$"+
-            JEM_SETTINGS.premiumTicketPrice.toFixed(2);
-
-    }
+    document.getElementById(
+        "premiumPriceDisplay"
+    ).textContent =
+        "$"
+        +
+        JEM_SETTINGS.premiumTicketPrice
+            .toFixed(2);
 
 }
+
+
+/* =========================================================
+   START
+========================================================= */
 
 startJEM();
 
